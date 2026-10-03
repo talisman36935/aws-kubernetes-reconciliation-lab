@@ -36,8 +36,21 @@ remove only `portfolio-reconcile` after confirming it is this test's cluster.
 ## Run the shared application
 
 The GCP repo's [workload quickstart](https://github.com/talisman36935/gcp-platform-delivery-lab#try-the-application-locally)
-is the single source of Report Workshop. AWS will pin that source/release instead
-of maintaining a divergent copy. There is not yet an AWS workload deployment.
+is the single source of Report Workshop. [workload/source.json](workload/source.json)
+pins the initial source revision instead of maintaining a divergent copy.
+To reproduce that exact application version:
+
+```sh
+git clone https://github.com/talisman36935/gcp-platform-delivery-lab.git
+cd gcp-platform-delivery-lab
+git checkout --detach b0a980233c94caf5cb2259a17c65fac96165a4e2
+cd workload
+docker compose up --build -d
+python3 smoke.py
+docker compose down
+```
+
+There is not yet a published application image or an AWS workload deployment.
 
 ## Validate the lifecycle intent boundary
 
@@ -53,6 +66,7 @@ AWS identity verification, an operational janitor, spending approval or a hard c
 ## Read the design
 
 - [Architecture, ownership and compatibility](docs/implementation.md)
+- [Recorded local verification](docs/verification.md)
 - [Safety, lifecycle and next cloud gates](docs/runbook.md)
 - [Full strategy](docs/plan/portfolio-demo-strategy-2026-10-02.md)
 - [Platform design](docs/plan/portfolio-demos/platforms.md)
