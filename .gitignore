@@ -1,0 +1,8 @@
+output/
+.tools/
+__pycache__/
+.env
+*.tfstate*
+*.tfvars
+!*.tfvars.example
+run-intent.json

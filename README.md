@@ -1,0 +1,64 @@
+# AWS Kubernetes Reconciliation Lab
+
+[![Validate](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/workflows/validate.yaml/badge.svg)](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/workflows/validate.yaml)
+
+A KROPS-inspired portfolio lab: Git-driven controller reconciliation, observable
+failure/recovery, and eventual **audited deletion** of a temporary AWS environment.
+Companion: [GCP Platform Delivery Lab](https://github.com/talisman36935/gcp-platform-delivery-lab).
+
+**Status: local reconciliation foundation, not an EKS implementation.**
+This first slice proves kind/Flux desired-state reconciliation and drift repair.
+CAPI/CAPA, ACK S3/SQS, AWS identity, independent teardown audit and TTL janitor
+remain explicit next milestones. No AWS resources are provisioned by current code.
+
+## Run the local reconciliation test
+
+Requirements: Linux amd64/arm64, Docker, curl, tar, sha256sum, network access, and
+sufficient local capacity for a disposable Kubernetes cluster. Prefer hosted CI
+on a small/shared host. Never point this experiment at an existing cluster.
+
+```sh
+git clone https://github.com/talisman36935/aws-kubernetes-reconciliation-lab.git
+cd aws-kubernetes-reconciliation-lab
+bash scripts/install-local-tools.sh "$PWD/.tools"
+export PATH="$PWD/.tools:$PATH"
+bash scripts/local-reconcile.sh "$(git rev-parse HEAD)"
+```
+
+Use a commit already pushed to the public repository: Flux fetches that exact SHA.
+The script creates only `portfolio-reconcile`, refuses to overwrite an existing
+cluster with that name, installs pinned Flux controllers, reconciles a ConfigMap,
+changes it out-of-band, then asserts Flux repaired it and applied the correct
+source revision. An EXIT trap removes that disposable cluster and its kubeconfig.
+If the process is forcibly killed, inspect `kind get clusters` and deliberately
+remove only `portfolio-reconcile` after confirming it is this test's cluster.
+
+## Run the shared application
+
+The GCP repo's [workload quickstart](https://github.com/talisman36935/gcp-platform-delivery-lab#try-the-application-locally)
+is the single source of Report Workshop. AWS will pin that source/release instead
+of maintaining a divergent copy. There is not yet an AWS workload deployment.
+
+## Validate the lifecycle intent boundary
+
+```sh
+python3 -m unittest discover -s lifecycle -v
+python3 lifecycle/preflight.py run-intent.json
+```
+
+See [runbook](docs/runbook.md) for the intent format and its strict limitations.
+The validator rejects broad targets and expired/unbounded intents; it is **not**
+AWS identity verification, an operational janitor, spending approval or a hard cap.
+
+## Read the design
+
+- [Architecture, ownership and compatibility](docs/implementation.md)
+- [Safety, lifecycle and next cloud gates](docs/runbook.md)
+- [Full strategy](docs/plan/portfolio-demo-strategy-2026-10-02.md)
+- [Platform design](docs/plan/portfolio-demos/platforms.md)
+- [Evidence and portfolio Labs contract](docs/plan/portfolio-demos/evidence-and-labs.md)
+- [Milestones](docs/plan/portfolio-demos/delivery-plan.md)
+- [Annotated reference catalogue](docs/plan/portfolio-demos/references.md)
+- [KROPS attribution](THIRD_PARTY_NOTICES.md)
+
+The planning documents describe intended capabilities, not completed cloud work.

@@ -1,0 +1,38 @@
+name: Validate
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s lifecycle -v
+      - run: bash -n scripts/*.sh
+      - run: shellcheck scripts/*.sh
+  local-reconciliation:
+    # Public upstream commits only; fork PRs get static checks and no external
+    # source mismatch. No cloud identity, Git write token, or cloud resources.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Install checksum-verified pinned tools
+        run: |
+          bash scripts/install-local-tools.sh "$RUNNER_TEMP/lab-tools"
+          echo "$RUNNER_TEMP/lab-tools" >> "$GITHUB_PATH"
+      - name: Prove reconciliation, drift repair and local cleanup
+        env:
+          SOURCE_REVISION: ${{ github.sha }}
+        run: bash scripts/local-reconcile.sh "$SOURCE_REVISION"
