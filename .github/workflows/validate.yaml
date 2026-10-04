@@ -18,6 +18,26 @@ jobs:
       - run: python3 -m unittest discover -s lifecycle -v
       - run: bash -n scripts/*.sh
       - run: shellcheck scripts/*.sh
+  shared-evidence-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Validate shared-source lock
+        id: source
+        run: python3 scripts/check-source.py >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: talisman36935/gcp-platform-delivery-lab
+          ref: ${{ steps.source.outputs.revision }}
+          path: shared-source
+          persist-credentials: false
+      - name: Verify the exact shared evidence contract
+        run: |
+          python3 -m pip install jsonschema==4.23.0
+          python3 -m unittest discover -s shared-source/workload/evidence -v
   local-reconciliation:
     # Public upstream commits only; fork PRs get static checks and no external
     # source mismatch. No cloud identity, Git write token, or cloud resources.

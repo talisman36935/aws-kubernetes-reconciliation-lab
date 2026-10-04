@@ -43,7 +43,7 @@ To reproduce that exact application version:
 ```sh
 git clone https://github.com/talisman36935/gcp-platform-delivery-lab.git
 cd gcp-platform-delivery-lab
-git checkout --detach b0a980233c94caf5cb2259a17c65fac96165a4e2
+git checkout --detach e8602fb9fe27436515c335451ae22e6874e5e9bc
 cd workload
 docker compose up --build -d
 python3 smoke.py
@@ -51,6 +51,10 @@ docker compose down
 ```
 
 There is not yet a published application image or an AWS workload deployment.
+
+The pinned source includes [local metrics and evidence recording](https://github.com/talisman36935/gcp-platform-delivery-lab/blob/e8602fb9fe27436515c335451ae22e6874e5e9bc/docs/local-observability.md).
+The AWS Validate workflow tests that exact shared evidence contract, including
+rejection of incomplete success records and private error text.
 
 ## Validate the lifecycle intent boundary
 

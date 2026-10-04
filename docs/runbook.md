@@ -22,6 +22,11 @@ AWS API calls and region syntax is not proof of service availability.
 
 ## Required before cloud execution
 
+Miles explicitly requested an access reminder before activation. Prompt for the
+choices below when local work reaches that boundary; never infer spending approval
+from available credentials. Prefer OIDC/federation and do not request pasted access
+keys in chat. This reminder does not block independent credential-free work.
+
 1. Choose an approved dedicated AWS account/region, budget and run lifetime.
 2. Verify caller identity and controller credential lifetime/refresh. A CI OIDC
    exchange alone does not give long-lived kind controllers a refresh path.
