@@ -7,6 +7,8 @@ failure/recovery, and eventual **audited deletion** of a temporary AWS environme
 Companion: [GCP Platform Delivery Lab](https://github.com/talisman36935/gcp-platform-delivery-lab).
 
 **Status: local reconciliation foundation, not an EKS implementation.**
+The EKS rendering spike now checks a bounded desired-state set against pinned
+CAPI/CAPA CRD schemas; controller and cloud qualification are still pending.
 This first slice proves kind/Flux desired-state reconciliation and drift repair.
 CAPI/CAPA, ACK S3/SQS, AWS identity, independent teardown audit and TTL janitor
 remain explicit next milestones. No AWS resources are provisioned by current code.
@@ -72,6 +74,7 @@ AWS identity verification, an operational janitor, spending approval or a hard c
 - [Architecture, ownership and compatibility](docs/implementation.md)
 - [Recorded local verification](docs/verification.md)
 - [Safety, lifecycle and next cloud gates](docs/runbook.md)
+- [EKS rendering and provider compatibility spike](docs/eks-compatibility.md)
 - [Full strategy](docs/plan/portfolio-demo-strategy-2026-10-02.md)
 - [Platform design](docs/plan/portfolio-demos/platforms.md)
 - [Evidence and portfolio Labs contract](docs/plan/portfolio-demos/evidence-and-labs.md)

@@ -18,6 +18,10 @@ jobs:
       - run: python3 -m unittest discover -s lifecycle -v
       - run: bash -n scripts/*.sh
       - run: shellcheck scripts/*.sh
+      - name: Pinned EKS provider schema compatibility
+        run: |
+          python3 -m pip install PyYAML==6.0.2 jsonschema==4.23.0
+          python3 scripts/check-eks-schemas.py
   shared-evidence-contract:
     runs-on: ubuntu-24.04
     timeout-minutes: 5

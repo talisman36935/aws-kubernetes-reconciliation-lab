@@ -32,7 +32,8 @@ out-of-band edit. It cannot prove CAPA, ACK or AWS deletion semantics.
 | kind | v0.33.0 | Checksum-verified installer; hosted local integration gate |
 | Kubernetes node | v1.35.8, digest in local script | Local profile only, not EKS version selection |
 | Flux | v2.9.6 | Local Git source/Kustomization/drift test |
-| CAPI / CAPA / ACK | Not selected | Must inspect version-specific APIs and qualify the cloud slice |
+| CAPI / CAPA | v1.13.4 / v2.13.1 | Synthetic renders match pinned served CRD schemas; controllers/cloud unqualified |
+| ACK S3 / SQS | Not selected | Selected APIs/controller identity still require qualification |
 
 Published release checksums detect download corruption; they are fetched from the
 same release origin and do not independently establish publisher authenticity.
