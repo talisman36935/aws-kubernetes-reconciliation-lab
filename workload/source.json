@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/talisman36935/gcp-platform-delivery-lab.git",
-  "revision": "487679ffcd7125f1f1fd7878d5d84401bc7d6819",
+  "revision": "2c12b6377a76b2e803c75a98c4af51d1af8f38c3",
   "directory": "workload",
   "image_digest": null,
   "status": "source-pinned; image release and AWS deployment not implemented"

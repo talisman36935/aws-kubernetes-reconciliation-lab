@@ -40,8 +40,11 @@ jobs:
           persist-credentials: false
       - name: Verify the exact shared evidence contract
         run: |
-          python3 -m pip install jsonschema==4.23.0
+          python3 -m pip install jsonschema==4.23.0 PyYAML==6.0.2
           python3 -m unittest discover -s shared-source/workload/evidence -v
+          python3 -m unittest discover -s shared-source/workload/deploy -v
+          python3 shared-source/workload/deploy/check_schemas.py
+          python3 shared-source/workload/deploy/check_database_schema.py
   local-reconciliation:
     # Public upstream commits only; fork PRs get static checks and no external
     # source mismatch. No cloud identity, Git write token, or cloud resources.

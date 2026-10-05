@@ -45,7 +45,7 @@ To reproduce that exact application version:
 ```sh
 git clone https://github.com/talisman36935/gcp-platform-delivery-lab.git
 cd gcp-platform-delivery-lab
-git checkout --detach 487679ffcd7125f1f1fd7878d5d84401bc7d6819
+git checkout --detach 2c12b6377a76b2e803c75a98c4af51d1af8f38c3
 cd workload
 docker compose up --build -d
 python3 smoke.py
@@ -54,9 +54,13 @@ docker compose down
 
 There is not yet a published application image or an AWS workload deployment.
 
-The pinned source includes [local metrics and evidence recording](https://github.com/talisman36935/gcp-platform-delivery-lab/blob/487679ffcd7125f1f1fd7878d5d84401bc7d6819/docs/local-observability.md),
+The pinned source includes [local metrics and evidence recording](https://github.com/talisman36935/gcp-platform-delivery-lab/blob/2c12b6377a76b2e803c75a98c4af51d1af8f38c3/docs/local-observability.md),
 durable API/worker tracing, bounded profiling and compiled regression/recovery.
-It passed [hosted validation](https://github.com/talisman36935/gcp-platform-delivery-lab/actions/runs/37164832226).
+The replica/SIGKILL recovery experiment passed [hosted validation at de55de7](https://github.com/talisman36935/gcp-platform-delivery-lab/actions/runs/37385769512).
+The pinned source additionally includes the dormant three-instance database profile;
+see [application replica and database contracts](https://github.com/talisman36935/gcp-platform-delivery-lab/blob/2c12b6377a76b2e803c75a98c4af51d1af8f38c3/docs/application-replicas.md).
+AWS CI checks both application and database renders against pinned schemas. These
+renders are not connected to the current Flux source and do not deploy workloads.
 The AWS Validate workflow tests that exact shared evidence contract, including
 rejection of incomplete success records and private error text.
 
