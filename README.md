@@ -73,6 +73,8 @@ AWS identity verification, an operational janitor, spending approval or a hard c
 
 ## Read the design
 
+- [Minimal London topology, budget gates and immediate teardown](docs/plan/portfolio-demos/minimal-infrastructure.md)
+
 - [Architecture, ownership and compatibility](docs/implementation.md)
 - [Recorded local verification](docs/verification.md)
 - [Safety, lifecycle and next cloud gates](docs/runbook.md)

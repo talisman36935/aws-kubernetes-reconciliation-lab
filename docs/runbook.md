@@ -1,5 +1,13 @@
 # Safety and cloud activation gates
 
+## Minimal cloud execution policy
+
+Follow the [minimal infrastructure and cost policy](plan/portfolio-demos/minimal-infrastructure.md)
+before activation. London is selected; budget alerts and immediate cleanup are
+required. £2/run and one hour remain proposals, not approved limits. Verified
+spending protection and bootstrap retention decisions remain activation gates.
+Existing topology/intent validators do not yet enforce this complete policy.
+
 ## Static run intent
 
 An illustrative intent (update expiry before validation):
@@ -10,11 +18,12 @@ An illustrative intent (update expiry before validation):
   "account_id": "123456789012",
   "region": "eu-west-2",
   "expires_at": "2026-10-03T20:00:00Z",
-  "budget_usd": 10
+  "budget_usd": 1
 }
 ```
 
-The account is a fictional format example, not a target. Exactly these five
+The account and USD amount are synthetic validator examples, not an approved
+budget or a conversion of the proposed GBP limit. Exactly these five
 fields are accepted. Expiry must be timezone-aware, in the future and no more
 than four hours away. The $100 ceiling only bounds a declared intent; it does
 not authorize expenditure or enforce cloud billing. The validator performs no
