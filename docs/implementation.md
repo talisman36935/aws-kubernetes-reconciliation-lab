@@ -28,7 +28,6 @@ out-of-band edit. It cannot prove CAPA, ACK or AWS deletion semantics.
 
 | Component | Pin | Qualification |
 | --- | --- | --- |
-| KROPS design reference | d54acc2c5ba9d083ee0449f172559c0b4724894b | Reference, not installed software |
 | kind | v0.33.0 | Checksum-verified installer; hosted local integration gate |
 | Kubernetes node | v1.35.8, digest in local script | Local profile only, not EKS version selection |
 | Flux | v2.9.6 | Local Git source/Kustomization/drift test |
@@ -47,6 +46,6 @@ source must exist publicly for Flux to fetch it. Neither job has cloud access.
 Success logs contain the source revision and observed drift assertion; this is
 test evidence, not the final versioned portfolio evidence bundle.
 
-Next: complete the KROPS/CAPA/ACK compatibility investigation, credential lifetime
+Next: complete controller/ACK compatibility qualification, credential lifetime
 design and externally durable run inventory; implement independent cleanup before
 qualifying a bounded AWS create/run/delete cycle. No cloud readiness is claimed.

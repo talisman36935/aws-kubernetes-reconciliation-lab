@@ -2,7 +2,7 @@
 
 ## Ephemeral HA cloud execution policy
 
-Follow the [ephemeral HA architecture and cost policy](plan/portfolio-demos/minimal-infrastructure.md)
+Follow the [ephemeral HA architecture and cost policy](architecture-cost.md)
 before activation. London multi-zone HA, low-cost viable nodes, full architecture,
 budget alerts and immediate audited cleanup are required. £2/run and one hour
 remain proposals, not approved or validated HA limits. Verified
@@ -32,7 +32,7 @@ AWS API calls and region syntax is not proof of service availability.
 
 ## Required before cloud execution
 
-Miles explicitly requested an access reminder before activation. Prompt for the
+Cloud execution requires an explicit access and spending review. Prompt for the
 choices below when local work reaches that boundary; never infer spending approval
 from available credentials. Prefer OIDC/federation and do not request pasted access
 keys in chat. This reminder does not block independent credential-free work.
@@ -62,7 +62,6 @@ interfaces, buckets, queues and retained logs/images with declared coverage.
 
 The portfolio will consume sanitized immutable historical bundles, not live
 credentials or public cluster-control endpoints. It must distinguish local tests,
-cloud-verified experiments and dormant environments. The original
-[evidence contract](plan/portfolio-demos/evidence-and-labs.md) describes the
-required provenance and observation timestamps. No website integration is shipped
+cloud-verified experiments and dormant environments. Evidence must record source/image provenance, observation timestamps,
+experiment results and independently verified cleanup. No website integration is shipped
 in this first repository slice.

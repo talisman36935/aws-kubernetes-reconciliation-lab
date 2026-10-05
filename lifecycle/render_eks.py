@@ -1,6 +1,7 @@
 """Render one bounded EKS intent. Performs no cloud or Kubernetes API writes."""
 
 import argparse
+from copy import deepcopy
 from datetime import datetime, timezone
 import ipaddress
 import json
@@ -14,13 +15,17 @@ def render(intent: dict, *, kubernetes_version: str, operator_cidr: str,
            instance_type: str, control_plane_role: str, node_role: str,
            identity_name: str, now: datetime) -> dict:
     validate(intent, now)
+    if intent["region"] != "eu-west-2":
+        raise ValueError("this profile is restricted to London")
     network = ipaddress.ip_network(operator_cidr, strict=True)
     if network.version != 4 or network.prefixlen == 0:
         raise ValueError("operator CIDR must be restricted IPv4")
     if not re.fullmatch(r"1\.[0-9]{2}", kubernetes_version):
         raise ValueError("supply an explicit EKS minor version; availability is a live gate")
-    if not re.fullmatch(r"[a-z][a-z0-9]*\.[a-z0-9]+", instance_type):
-        raise ValueError("supply an explicitly approved instance type")
+    if instance_type not in {"t4g.large", "t3a.large"}:
+        raise ValueError("select a qualified 8 GiB HA candidate")
+    ami_type = ("AL2023_ARM_64_STANDARD" if instance_type == "t4g.large"
+                else "AL2023_x86_64_STANDARD")
     for role in (control_plane_role, node_role):
         if not re.fullmatch(r"lab-[A-Za-z0-9_-]{1,59}", role):
             raise ValueError("IAM role names must use the lab- namespace")
@@ -61,7 +66,7 @@ def render(intent: dict, *, kubernetes_version: str, operator_cidr: str,
             "roleName": control_plane_role, "sshKeyName": "",
             "identityRef": {"kind": "AWSClusterRoleIdentity", "name": identity_name},
             "network": {"vpc": {"cidrBlock": "10.60.0.0/16",
-                               "availabilityZoneUsageLimit": 2,
+                               "availabilityZoneUsageLimit": 3,
                                "availabilityZoneSelection": "Ordered"}},
             "endpointAccess": {"public": True, "private": True,
                                "publicCIDRs": [str(network)]},
@@ -80,12 +85,28 @@ def render(intent: dict, *, kubernetes_version: str, operator_cidr: str,
             }},
         }),
         obj("infrastructure.cluster.x-k8s.io/v1beta2", "AWSManagedMachinePool", pool, {
-            "amiType": "AL2023_x86_64_STANDARD", "instanceType": instance_type,
+            "amiType": ami_type, "instanceType": instance_type,
             "roleName": node_role, "capacityType": "onDemand",
             "scaling": {"minSize": 1, "maxSize": 1}, "additionalTags": dict(tags),
         }),
         obj("bootstrap.cluster.x-k8s.io/v1beta2", "NodeadmConfig", pool, {}),
     ]
+    # One fixed-size group per zone guarantees desired placement, unlike a
+    # single three-node group whose actual AZ distribution can vary.
+    templates = items[4:]
+    items = items[:4]
+    for zone in ("eu-west-2a", "eu-west-2b", "eu-west-2c"):
+        zone_pool = pool + "-" + zone[-1]
+        for template in templates:
+            item = deepcopy(template)
+            item["metadata"]["name"] = zone_pool
+            if item["kind"] == "MachinePool":
+                spec = item["spec"]["template"]["spec"]
+                spec["bootstrap"]["configRef"]["name"] = zone_pool
+                spec["infrastructureRef"]["name"] = zone_pool
+            elif item["kind"] == "AWSManagedMachinePool":
+                item["spec"]["availabilityZones"] = [zone]
+            items.append(item)
     return {"apiVersion": "v1", "kind": "List", "items": items}
 
 

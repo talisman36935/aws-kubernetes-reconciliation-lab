@@ -2,7 +2,7 @@
 
 [![Validate](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/workflows/validate.yaml/badge.svg)](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/workflows/validate.yaml)
 
-A KROPS-inspired portfolio lab: Git-driven controller reconciliation, observable
+A Kubernetes reconciliation lab: Git-driven controller reconciliation, observable
 failure/recovery, and eventual **audited deletion** of a temporary AWS environment.
 Companion: [GCP Platform Delivery Lab](https://github.com/talisman36935/gcp-platform-delivery-lab).
 
@@ -73,17 +73,12 @@ AWS identity verification, an operational janitor, spending approval or a hard c
 
 ## Read the design
 
-- [Ephemeral London HA architecture, instance comparison and cost gates](docs/plan/portfolio-demos/minimal-infrastructure.md)
+- [Ephemeral London HA architecture, instance comparison and cost gates](docs/architecture-cost.md)
 
 - [Architecture, ownership and compatibility](docs/implementation.md)
 - [Recorded local verification](docs/verification.md)
 - [Safety, lifecycle and next cloud gates](docs/runbook.md)
 - [EKS rendering and provider compatibility spike](docs/eks-compatibility.md)
-- [Full strategy](docs/plan/portfolio-demo-strategy-2026-10-02.md)
-- [Platform design](docs/plan/portfolio-demos/platforms.md)
-- [Evidence and portfolio Labs contract](docs/plan/portfolio-demos/evidence-and-labs.md)
-- [Milestones](docs/plan/portfolio-demos/delivery-plan.md)
-- [Annotated reference catalogue](docs/plan/portfolio-demos/references.md)
-- [KROPS attribution](THIRD_PARTY_NOTICES.md)
+- [Third-party notices](THIRD_PARTY_NOTICES.md)
 
-The planning documents describe intended capabilities, not completed cloud work.
+The architecture profile describes target capabilities, not completed cloud work.
