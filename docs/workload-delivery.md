@@ -7,7 +7,9 @@ a clean checkout of exactly that commit and a release record matching both pins.
 The current pin is GCP source `f531d2609bbd02c011af6028184eb80d393ee07e` and
 image index `ghcr.io/talisman36935/report-workshop@sha256:0706b71b0771970044a927a3f9ab7c0552ec663c1c96affefdcdcb2d41e61a1e`.
 That exact source passed GCP Validate and hosted native ARM/Kubernetes HA
-qualification (run `37479625942`); this is not AWS runtime or cloud qualification.
+qualification (run `37479625942`). The AWS fixture now passes its hosted
+promotion/rollback experiment (run `37482370289`); neither run is live AWS or
+EKS/CAPA/ACK qualification.
 
 ```sh
 python3 scripts/render-workload-delivery.py \

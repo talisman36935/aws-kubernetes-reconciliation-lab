@@ -1,5 +1,9 @@
 # Hosted application GitOps experiment
 
+Latest run: [37482370289](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37482370289)
+passed with the current GCP source/image pair. The sanitized result is archived
+at [the 18c7015 observation](observations/18c7015/qualification.md).
+
 [Run 37444041498](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37444041498)
 passed all runtime and independent observation gates. The
 [qualified record and failure audit](observations/d418d3f/qualification.md) retain

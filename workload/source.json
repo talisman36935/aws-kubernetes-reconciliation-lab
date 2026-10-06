@@ -3,5 +3,5 @@
   "revision": "f531d2609bbd02c011af6028184eb80d393ee07e",
   "directory": "workload",
   "image_digest": "ghcr.io/talisman36935/report-workshop@sha256:0706b71b0771970044a927a3f9ab7c0552ec663c1c96affefdcdcb2d41e61a1e",
-  "status": "GCP source/image pair published as a public AMD64/ARM64 image; native ARM smoke and hosted Kubernetes PostgreSQL promotion/node-loss qualification passed in 37479625942; AWS fixture health parity updated, AWS hosted GitOps requalification and all live-cloud deployment remain pending"
+  "status": "GCP source/image pair published as a public AMD64/ARM64 image and qualified for native ARM/Kubernetes HA in 37479625942; AWS fixture parity and hosted GitOps promotion/rollback qualification passed in 37482370289; live-cloud provisioning, IAM/SQS/S3, EKS/CAPA/ACK, budget and independent cleanup remain pending"
 }
