@@ -13,8 +13,8 @@ class PreflightTests(unittest.TestCase):
             "run_id": "lab-fixture",
             "account_id": "123456789012",
             "region": "eu-west-2",
-            "expires_at": "2026-10-03T14:00:00Z",
-            "budget_usd": 10,
+            "expires_at": "2026-10-03T13:00:00Z",
+            "budget_gbp": 5,
         }
 
     def test_valid(self):
@@ -24,10 +24,10 @@ class PreflightTests(unittest.TestCase):
         for field, value in [
             ("run_id", "*"), ("account_id", "*"), ("region", "all"),
             ("expires_at", "2026-10-03T11:00:00Z"),
-            ("expires_at", "2026-10-04T12:00:00Z"),
+            ("expires_at", "2026-10-03T13:00:01Z"),
             ("expires_at", "2026-10-03T14:00:00"),
-            ("budget_usd", 0), ("budget_usd", True),
-            ("budget_usd", float("nan")), ("budget_usd", 101),
+            ("budget_gbp", 0), ("budget_gbp", True),
+            ("budget_gbp", float("nan")), ("budget_gbp", 5.01),
         ]:
             with self.subTest(field=field, value=value):
                 with self.assertRaises(ValueError):

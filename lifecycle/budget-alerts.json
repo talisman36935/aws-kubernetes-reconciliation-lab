@@ -1,0 +1,79 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Account-wide monthly gross-cost notifications; provide recipient and billing currency privately. Not a per-run cap.",
+  "Parameters": {
+    "AlertEmail": {
+      "Type": "String",
+      "NoEcho": true,
+      "AllowedPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+      "ConstraintDescription": "Supply the approved private lab-alert mailbox."
+    },
+    "BudgetAmount": {
+      "Type": "Number",
+      "MinValue": 0.01,
+      "MaxValue": 5,
+      "Description": "Gross monthly limit in GBP; never exceed the approved per-run ceiling."
+    },
+    "BudgetCurrency": {
+      "Type": "String",
+      "AllowedValues": ["GBP"],
+      "Description": "This lab template fails closed unless the billing currency matches the approved GBP ceiling."
+    }
+  },
+  "Resources": {
+    "BudgetAlertsTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "DisplayName": "Portfolio lab budget alerts",
+        "Subscription": [
+          {
+            "Endpoint": {"Ref": "AlertEmail"},
+            "Protocol": "email"
+          }
+        ],
+        "Tags": [
+          {"Key": "portfolio-owner", "Value": "portfolio-lab"},
+          {"Key": "portfolio-purpose", "Value": "budget-alerts"}
+        ]
+      }
+    },
+    "RunCostBudget": {
+      "Type": "AWS::Budgets::Budget",
+      "Properties": {
+        "Budget": {
+          "BudgetName": "portfolio-lab-gross-cost",
+          "BudgetLimit": {
+            "Amount": {"Ref": "BudgetAmount"},
+            "Unit": {"Ref": "BudgetCurrency"}
+          },
+          "TimeUnit": "MONTHLY",
+          "BudgetType": "COST",
+          "CostTypes": {
+            "IncludeCredit": false,
+            "IncludeDiscount": false,
+            "IncludeRefund": false,
+            "IncludeTax": true
+          }
+        },
+        "NotificationsWithSubscribers": [
+          {"Notification": {"NotificationType": "ACTUAL", "ComparisonOperator": "GREATER_THAN", "Threshold": 25, "ThresholdType": "PERCENTAGE"}, "Subscribers": [{"SubscriptionType": "SNS", "Address": {"Ref": "BudgetAlertsTopic"}}]},
+          {"Notification": {"NotificationType": "ACTUAL", "ComparisonOperator": "GREATER_THAN", "Threshold": 50, "ThresholdType": "PERCENTAGE"}, "Subscribers": [{"SubscriptionType": "SNS", "Address": {"Ref": "BudgetAlertsTopic"}}]},
+          {"Notification": {"NotificationType": "ACTUAL", "ComparisonOperator": "GREATER_THAN", "Threshold": 75, "ThresholdType": "PERCENTAGE"}, "Subscribers": [{"SubscriptionType": "SNS", "Address": {"Ref": "BudgetAlertsTopic"}}]},
+          {"Notification": {"NotificationType": "ACTUAL", "ComparisonOperator": "GREATER_THAN", "Threshold": 90, "ThresholdType": "PERCENTAGE"}, "Subscribers": [{"SubscriptionType": "SNS", "Address": {"Ref": "BudgetAlertsTopic"}}]},
+          {"Notification": {"NotificationType": "ACTUAL", "ComparisonOperator": "GREATER_THAN", "Threshold": 100, "ThresholdType": "PERCENTAGE"}, "Subscribers": [{"SubscriptionType": "SNS", "Address": {"Ref": "BudgetAlertsTopic"}}]},
+          {"Notification": {"NotificationType": "FORECASTED", "ComparisonOperator": "GREATER_THAN", "Threshold": 75, "ThresholdType": "PERCENTAGE"}, "Subscribers": [{"SubscriptionType": "SNS", "Address": {"Ref": "BudgetAlertsTopic"}}]},
+          {"Notification": {"NotificationType": "FORECASTED", "ComparisonOperator": "GREATER_THAN", "Threshold": 100, "ThresholdType": "PERCENTAGE"}, "Subscribers": [{"SubscriptionType": "SNS", "Address": {"Ref": "BudgetAlertsTopic"}}]}
+        ],
+        "ResourceTags": [
+          {"Key": "portfolio-owner", "Value": "portfolio-lab"},
+          {"Key": "portfolio-purpose", "Value": "budget-alerts"}
+        ]
+      }
+    }
+  },
+  "Outputs": {
+    "BudgetName": {"Value": {"Ref": "RunCostBudget"}},
+    "AlertsTopicArn": {"Value": {"Ref": "BudgetAlertsTopic"}},
+    "EmailConfirmationRequired": {"Value": "Confirm the SNS email subscription before any lab provisioning."}
+  }
+}

@@ -3,11 +3,12 @@
 ## Ephemeral HA cloud execution policy
 
 Follow the [ephemeral HA architecture and cost policy](architecture-cost.md)
-before activation. London multi-zone HA, low-cost viable nodes, full architecture,
-budget alerts and immediate audited cleanup are required. £2/run and one hour
-remain proposals, not approved or validated HA limits. Verified
-spending protection and bootstrap retention decisions remain activation gates.
-Existing topology/intent validators do not yet enforce this complete policy.
+before activation. London multi-zone HA, 4 GiB minimum-first Graviton nodes,
+layered provider-specific alerts, a £5 gross per-run planning ceiling, £10 total
+for the first GCP+AWS attempts, 60-minute maximum lifetime and immediate audited
+cleanup are the approved starting policy. These are not provider-guaranteed
+monetary caps; preflight cost coverage and alert delivery must pass before apply.
+Existing topology/intent validators do not yet enforce the complete policy.
 
 ## Static run intent
 
@@ -18,17 +19,15 @@ An illustrative intent (update expiry before validation):
   "run_id": "lab-example",
   "account_id": "123456789012",
   "region": "eu-west-2",
-  "expires_at": "2026-10-03T20:00:00Z",
-  "budget_usd": 1
+  "expires_at": "2026-10-06T20:00:00Z",
+  "budget_gbp": 5
 }
 ```
 
-The account and USD amount are synthetic validator examples, not an approved
-budget or a conversion of the proposed GBP limit. Exactly these five
-fields are accepted. Expiry must be timezone-aware, in the future and no more
-than four hours away. The $100 ceiling only bounds a declared intent; it does
-not authorize expenditure or enforce cloud billing. The validator performs no
-AWS API calls and region syntax is not proof of service availability.
+The account is a synthetic validator example; the £5 per-run budget and 60-minute
+maximum now reflect the approved policy. Exactly these five fields are accepted.
+Expiry must be timezone-aware, in the future and no more than 60 minutes away.
+The validator performs no AWS API calls and does not enforce cloud billing.
 
 ## Required before cloud execution
 
@@ -37,7 +36,14 @@ choices below when local work reaches that boundary; never infer spending approv
 from available credentials. Prefer OIDC/federation and do not request pasted access
 keys in chat. This reminder does not block independent credential-free work.
 
-1. Choose an approved dedicated AWS account/region, budget and run lifetime.
+1. Choose the dedicated AWS account and confirm its billing currency; set the
+   £5 gross-cost target and 60-minute run expiry. Configure actual-cost
+   alerts at 25/50/75/90/100%, forecast alerts at 75/100% when available, and
+   verify the SNS email subscription before provisioning. Use the parameterized
+   [budget template](../lifecycle/budget-alerts.json); its email input is private,
+   its amount is limited to £5, and notifications exclude trial credits. It is an
+   account-wide monthly warning, not a per-run cap; do not use it without checking
+   the account's other spend and billing-month boundary.
 2. Verify caller identity and controller credential lifetime/refresh. A CI OIDC
    exchange alone does not give long-lived kind controllers a refresh path.
 3. Qualify controller/CRD/API versions and least-privilege bootstrap IAM.

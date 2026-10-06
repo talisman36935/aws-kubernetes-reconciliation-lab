@@ -9,7 +9,7 @@ import sys
 
 def validate(intent: dict, now: datetime) -> None:
     """Fail closed on unknown fields, ambiguous scope, or an unbounded lifetime."""
-    fields = {"run_id", "account_id", "region", "expires_at", "budget_usd"}
+    fields = {"run_id", "account_id", "region", "expires_at", "budget_gbp"}
     if set(intent) != fields:
         raise ValueError("run intent must contain exactly the documented fields")
     if not re.fullmatch(r"lab-[a-z0-9-]{1,40}", str(intent["run_id"])):
@@ -19,11 +19,11 @@ def validate(intent: dict, now: datetime) -> None:
     if not re.fullmatch(r"(us|eu|ap|ca|sa|af|me|il|mx)-[a-z]+-[0-9]", str(intent["region"])):
         raise ValueError("region must be an explicit commercial AWS region")
     expires = datetime.fromisoformat(intent["expires_at"].replace("Z", "+00:00"))
-    if expires.tzinfo is None or not now < expires <= now + timedelta(hours=4):
-        raise ValueError("expiry must be timezone-aware, in the future, and within four hours")
-    budget = intent["budget_usd"]
-    if isinstance(budget, bool) or not isinstance(budget, (int, float)) or not 0 < budget <= 100:
-        raise ValueError("budget must be positive and within the lab's $100 intent ceiling")
+    if expires.tzinfo is None or not now < expires <= now + timedelta(hours=1):
+        raise ValueError("expiry must be timezone-aware, in the future, and within 60 minutes")
+    budget = intent["budget_gbp"]
+    if isinstance(budget, bool) or not isinstance(budget, (int, float)) or not 0 < budget <= 5:
+        raise ValueError("budget_gbp must be positive and no greater than the approved £5 ceiling")
 
 
 if __name__ == "__main__":

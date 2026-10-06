@@ -22,9 +22,10 @@ def render(intent: dict, *, kubernetes_version: str, operator_cidr: str,
         raise ValueError("operator CIDR must be restricted IPv4")
     if not re.fullmatch(r"1\.[0-9]{2}", kubernetes_version):
         raise ValueError("supply an explicit EKS minor version; availability is a live gate")
-    if instance_type not in {"t4g.large", "t3a.large"}:
-        raise ValueError("select a qualified 8 GiB HA candidate")
-    ami_type = ("AL2023_ARM_64_STANDARD" if instance_type == "t4g.large"
+    if instance_type not in {"t4g.medium", "t3a.medium",
+                             "t4g.large", "t3a.large"}:
+        raise ValueError("select a 4 GiB minimum candidate or measured 8 GiB fallback")
+    ami_type = ("AL2023_ARM_64_STANDARD" if instance_type.startswith("t4g.")
                 else "AL2023_x86_64_STANDARD")
     for role in (control_plane_role, node_role):
         if not re.fullmatch(r"lab-[A-Za-z0-9_-]{1,59}", role):
@@ -35,7 +36,7 @@ def render(intent: dict, *, kubernetes_version: str, operator_cidr: str,
     labels = {"portfolio.whitt.uk/owner": "portfolio-lab",
               "portfolio.whitt.uk/run-id": name}
     annotations = {"portfolio.whitt.uk/expires-at": intent["expires_at"],
-                   "portfolio.whitt.uk/budget-usd": str(intent["budget_usd"])}
+                   "portfolio.whitt.uk/budget-gbp": str(intent["budget_gbp"])}
 
     def obj(api, kind, object_name, spec=None):
         metadata = {"name": object_name, "labels": dict(labels),

@@ -17,7 +17,8 @@ The renderer follows the maintained EKS managed-machine-pool template:
 - CAPI Cluster and MachinePool.
 - CAPA AWSManagedCluster and AWSManagedControlPlane.
 - Three CAPA AWSManagedMachinePools with one AL2023 node each; ARM for
-  t4g.large, x86 for t3a.large.
+  t4g.medium (first candidate) or t4g.large (measured fallback), x86 for
+  t3a.medium/t3a.large only when ARM is unavailable or incompatible.
 - CAPA NodeadmConfig for bootstrap.
 
 The generated namespace is the run ID. All objects carry owner/run labels and
@@ -62,8 +63,8 @@ python3 lifecycle/render_eks.py run-intent.json \
 
 The command prints a Kubernetes List. Review and retain it with the run inventory;
 application to a management cluster is a later lifecycle step. The preflight
-requires future expiry within four hours and a positive bounded budget intent.
-Those fields do not enforce billing or prove AWS identity.
+requires future expiry within 60 minutes and a positive budget intent no greater
+than £5. Those fields do not enforce billing or prove AWS identity.
 
 ## Qualification still required
 
