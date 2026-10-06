@@ -1,6 +1,7 @@
 """Check local-only GitOps fixture derivation against the pinned shared renderer."""
 
 import argparse
+import copy
 import importlib.util
 import json
 from pathlib import Path
@@ -30,7 +31,7 @@ def verify_root_health(root_items):
         raise ValueError("report-apps Deployment health check differs from shared renderer contract")
 
 
-def verify(shared_source: Path):
+def render_fixture(shared_source: Path):
     lock = json.loads((ROOT / "workload/source.json").read_text())
     revision = subprocess.run(["git", "-C", str(shared_source), "rev-parse", "HEAD"],
                               check=True, capture_output=True, text=True).stdout.strip()
@@ -45,6 +46,30 @@ def verify(shared_source: Path):
                "capabilities": ["schema-check", "cloud-queue-object-v1"]}
     expected = module.render(release=release, owner="flux", namespace="report-gitops",
                              storage_class="standard")
+    return expected
+
+
+def write_fixture(expected):
+    apps = expected["apps"]
+    for obj in apps:
+        if obj.get("kind") == "Deployment":
+            annotations = obj["spec"]["template"]["metadata"].setdefault("annotations", {})
+            annotations["portfolio.whitt.uk/config-release"] = "baseline"
+    apps.append({"apiVersion": "v1", "kind": "ConfigMap",
+                 "metadata": {"name": "delivery-release", "namespace": "report-gitops"},
+                 "data": {"release": "baseline"}})
+    for group, items in expected.items():
+        if not isinstance(items, list):
+            continue
+        destination = FIXTURE / group / "resources.json"
+        destination.write_text(json.dumps({"apiVersion": "v1", "kind": "List",
+                                           "items": items}, indent=2) + "\n")
+
+
+def verify(shared_source: Path, write=False):
+    expected = render_fixture(shared_source)
+    if write:
+        write_fixture(copy.deepcopy(expected))
     root_items = json.loads((FIXTURE / "root/resources.json").read_text())["items"]
     verify_root_health(root_items)
     for group in ("platform", "migrations", "apps"):
@@ -67,4 +92,7 @@ def verify(shared_source: Path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--shared-source", type=Path, required=True)
-    verify(parser.parse_args().shared_source)
+    parser.add_argument("--write", action="store_true",
+                        help="regenerate the shared-derived groups with baseline test markers")
+    args = parser.parse_args()
+    verify(args.shared_source, write=args.write)

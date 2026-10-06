@@ -4,16 +4,24 @@ The shared source owns the Pub/Sub/GCS and SQS/S3 adapters and delivery renderer
 AWS consumes its immutable source and image in `workload/source.json`; it does not
 maintain a second application implementation. The delivery entry point requires
 a clean checkout of exactly that commit and a release record matching both pins.
-The current pin is GCP source `32c98ffd9cacb528c2d017f7ea39b54536ca2211` and
-image index `ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5`.
-That exact source passed GCP Validate (`37493189725`) and hosted native ARM /
-Kubernetes HA qualification (`37493759179`). Anonymous pulls verified the public
-AMD64 and ARM64 image contents. AWS fixture parity passed Validate runs
-`37495547945` and `37495581270`; hosted application GitOps passed run
-`37496120127`. Its allowlisted record is archived at
+The current candidate pin is GCP source `3b1abf3b791b4ab95f852c860786ca91d8c0a381` and
+image index `ghcr.io/talisman36935/report-workshop@sha256:dfba95425f82b619987f307e63e2e2720f9395a5a2c7836ec2d2a25f7d398d23`.
+That exact source passed GCP Validate (`37517856995`) and publish/native-ARM/
+Kubernetes HA qualification (`37518413015`). Anonymous verification checked
+AMD64/ARM64 runtime content. The new pin is staged for AWS fixture validation and
+hosted application GitOps requalification; the previous qualified AWS record is
+archived at
 [`observations/372f432/workload-gitops.json`](observations/372f432/workload-gitops.json).
-The prior pin's qualification (`37482370289`) remains historical. None of these
-runs is live AWS or EKS/CAPA/ACK qualification.
+Prior AWS delivery runs remain historical evidence. None of these runs is live AWS
+or EKS/CAPA/ACK qualification.
+
+The local `management/workload-test` platform/migration/app resources are derived
+from the locked shared renderer. When advancing the lock, check out that exact
+clean shared commit and run `scripts/check-workload-fixture.py --shared-source
+PATH --write`; this regenerates only those shared-derived groups and retains the
+explicit baseline test marker. The root health contract and local network/denial
+overlays remain separately owned and unchanged. The same command without `--write`
+is the parity check used by Validate.
 
 ```sh
 python3 scripts/render-workload-delivery.py \

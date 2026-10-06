@@ -114,7 +114,7 @@
           "app.kubernetes.io/name": "report-workshop"
         },
         "annotations": {
-          "portfolio.whitt.uk/source-revision": "32c98ffd9cacb528c2d017f7ea39b54536ca2211"
+          "portfolio.whitt.uk/source-revision": "3b1abf3b791b4ab95f852c860786ca91d8c0a381"
         }
       },
       "automountServiceAccountToken": false
@@ -129,7 +129,7 @@
           "app.kubernetes.io/name": "report-workshop"
         },
         "annotations": {
-          "portfolio.whitt.uk/source-revision": "32c98ffd9cacb528c2d017f7ea39b54536ca2211"
+          "portfolio.whitt.uk/source-revision": "3b1abf3b791b4ab95f852c860786ca91d8c0a381"
         }
       },
       "automountServiceAccountToken": false
@@ -144,7 +144,7 @@
           "app.kubernetes.io/name": "report-workshop"
         },
         "annotations": {
-          "portfolio.whitt.uk/source-revision": "32c98ffd9cacb528c2d017f7ea39b54536ca2211"
+          "portfolio.whitt.uk/source-revision": "3b1abf3b791b4ab95f852c860786ca91d8c0a381"
         }
       },
       "automountServiceAccountToken": false

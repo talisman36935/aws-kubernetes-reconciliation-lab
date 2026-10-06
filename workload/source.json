@@ -1,7 +1,7 @@
 {
   "repository": "https://github.com/talisman36935/gcp-platform-delivery-lab.git",
-  "revision": "32c98ffd9cacb528c2d017f7ea39b54536ca2211",
+  "revision": "3b1abf3b791b4ab95f852c860786ca91d8c0a381",
   "directory": "workload",
-  "image_digest": "ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5",
-  "status": "Exact GCP source passed Validate 37493189725 and hosted HA/ARM qualification 37493759179; public AMD64/ARM64 image content verified anonymously; AWS fixture and hosted application GitOps passed Validate 37495547945/37495581270 and qualification 37496120127; live-cloud provisioning, IAM/SQS/S3, EKS/CAPA/ACK, budget and independent cleanup remain pending"
+  "image_digest": "ghcr.io/talisman36935/report-workshop@sha256:dfba95425f82b619987f307e63e2e2720f9395a5a2c7836ec2d2a25f7d398d23",
+  "status": "Exact GCP source passed Validate 37517856995 and publish/native-ARM/Kubernetes-HA qualification 37518413015; AMD64/ARM64 runtime content verified anonymously; AWS fixture validation and hosted GitOps qualification are pending for this upgraded pin; live-cloud provisioning, IAM/SQS/S3, EKS/CAPA/ACK, budget and independent cleanup remain pending"
 }
