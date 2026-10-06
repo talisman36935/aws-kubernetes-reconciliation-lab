@@ -382,8 +382,13 @@ def main():
                 for group in ("platform", "migrations", "apps"):
                     try:
                         obj = get("kustomizations.kustomize.toolkit.fluxcd.io", "report-" + group, "flux-system")
-                        print(group, [(c["type"], c["status"], c.get("reason"))
-                                      for c in obj.get("status", {}).get("conditions", [])])
+                        print(group, [{"type": c["type"], "status": c["status"],
+                            "reason": c.get("reason"), "categories": categories(c.get("message", "")),
+                            "resource_hints": sorted(set(re.findall(
+                                r"\b(?:deployments|replicasets|pods|services|poddisruptionbudgets|"
+                                r"Deployment|ReplicaSet|PodDisruptionBudget|Service|ConfigMap)\b",
+                                c.get("message", ""))))}
+                            for c in obj.get("status", {}).get("conditions", [])])
                     except Exception:
                         pass
                 record["diagnostics"] = diagnostics()

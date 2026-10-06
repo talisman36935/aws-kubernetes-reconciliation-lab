@@ -70,6 +70,13 @@
           "name": "portfolio"
         },
         "path": "./management/workload-test/apps",
+        "healthCheckExprs": [
+          {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "current": "has(status.observedGeneration) && has(status.updatedReplicas) && has(status.readyReplicas) && has(status.availableReplicas) && status.observedGeneration == metadata.generation && status.updatedReplicas == spec.replicas && status.readyReplicas == spec.replicas && status.availableReplicas == spec.replicas"
+          }
+        ],
         "dependsOn": [
           {
             "name": "report-migrations"

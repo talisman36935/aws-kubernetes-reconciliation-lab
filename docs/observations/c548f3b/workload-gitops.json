@@ -1,0 +1,1101 @@
+{
+  "verification": "hosted-kind-flux",
+  "result": "failed",
+  "started_at": "2026-10-06T09:06:57.920857+00:00",
+  "baseline_revision": "cd0c2335c343fc4fd2c128da5c571dca22864b6f",
+  "candidate_revision": "c548f3b15607702d9bd9a83dce1f4b2f8ce9aaee",
+  "application_source": "0e0a6133a18e4cfb10aae4defabd5b8f52ec69b5",
+  "image": "ghcr.io/talisman36935/report-workshop@sha256:505f63c5428ef76ccbd39389b623962f8abc3bc72e73bc73b1b5cfcf70bcc23a",
+  "cloud_provisioned": false,
+  "network_policy_enforced": false,
+  "simulation": "three labelled workers on one host; local NetworkPolicy allow/deny probes",
+  "configuration_rollback_only": true,
+  "phases": [],
+  "permissions": {},
+  "controller_denial": null,
+  "migration_before_apps": false,
+  "cluster_deleted": true,
+  "errors": [
+    {
+      "stage": "baseline-reconciliation",
+      "category": "CalledProcessError"
+    }
+  ],
+  "diagnostics": {
+    "pods": [
+      {
+        "name": "report-api-7bbb9f46c7-2brkk",
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker2",
+        "containers": [
+          {
+            "name": "schema-ready",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            }
+          },
+          {
+            "name": "api",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "schema-ready",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "api",
+            "waiting_reason": null,
+            "terminated_reason": null
+          }
+        ]
+      },
+      {
+        "name": "report-api-7bbb9f46c7-rnzr2",
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker3",
+        "containers": [
+          {
+            "name": "schema-ready",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            }
+          },
+          {
+            "name": "api",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "schema-ready",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "api",
+            "waiting_reason": null,
+            "terminated_reason": null
+          }
+        ]
+      },
+      {
+        "name": "report-api-7bbb9f46c7-xqzhf",
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker",
+        "containers": [
+          {
+            "name": "schema-ready",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            }
+          },
+          {
+            "name": "api",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "schema-ready",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "api",
+            "waiting_reason": null,
+            "terminated_reason": null
+          }
+        ]
+      },
+      {
+        "name": "report-db-1",
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker2",
+        "containers": [
+          {
+            "name": "bootstrap-controller",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          },
+          {
+            "name": "postgres",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "bootstrap-controller",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "postgres",
+            "waiting_reason": null,
+            "terminated_reason": null
+          }
+        ]
+      },
+      {
+        "name": "report-db-2",
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker3",
+        "containers": [
+          {
+            "name": "bootstrap-controller",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          },
+          {
+            "name": "postgres",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "bootstrap-controller",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "postgres",
+            "waiting_reason": null,
+            "terminated_reason": null
+          }
+        ]
+      },
+      {
+        "name": "report-db-3",
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker",
+        "containers": [
+          {
+            "name": "bootstrap-controller",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          },
+          {
+            "name": "postgres",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "bootstrap-controller",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "postgres",
+            "waiting_reason": null,
+            "terminated_reason": null
+          }
+        ]
+      },
+      {
+        "name": "report-migrate-0e0a6133a18e-zcvl6",
+        "phase": "Succeeded",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "False",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": "PodCompleted",
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "False",
+            "reason": "PodCompleted",
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "False",
+            "reason": "PodCompleted",
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker2",
+        "containers": [
+          {
+            "name": "migrate",
+            "resources": {
+              "limits": {
+                "cpu": "500m",
+                "memory": "256Mi"
+              },
+              "requests": {
+                "cpu": "100m",
+                "memory": "128Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "migrate",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          }
+        ]
+      },
+      {
+        "name": "report-worker-768dbf554f-n9955",
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker3",
+        "containers": [
+          {
+            "name": "schema-ready",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "256Mi"
+              }
+            }
+          },
+          {
+            "name": "worker",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "256Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "schema-ready",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "worker",
+            "waiting_reason": null,
+            "terminated_reason": null
+          }
+        ]
+      },
+      {
+        "name": "report-worker-768dbf554f-tx9fb",
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker2",
+        "containers": [
+          {
+            "name": "schema-ready",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "256Mi"
+              }
+            }
+          },
+          {
+            "name": "worker",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "256Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "schema-ready",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "worker",
+            "waiting_reason": null,
+            "terminated_reason": null
+          }
+        ]
+      },
+      {
+        "name": "report-worker-768dbf554f-zs4b2",
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker",
+        "containers": [
+          {
+            "name": "schema-ready",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "256Mi"
+              }
+            }
+          },
+          {
+            "name": "worker",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "512Mi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "256Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "schema-ready",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "worker",
+            "waiting_reason": null,
+            "terminated_reason": null
+          }
+        ]
+      }
+    ],
+    "persistentvolumeclaims": [
+      {
+        "name": "report-db-1",
+        "phase": "Bound",
+        "conditions": []
+      },
+      {
+        "name": "report-db-2",
+        "phase": "Bound",
+        "conditions": []
+      },
+      {
+        "name": "report-db-3",
+        "phase": "Bound",
+        "conditions": []
+      }
+    ],
+    "jobs": [
+      {
+        "name": "report-migrate-0e0a6133a18e",
+        "phase": null,
+        "conditions": [
+          {
+            "type": "SuccessCriteriaMet",
+            "status": "True",
+            "reason": "CompletionsReached",
+            "categories": []
+          },
+          {
+            "type": "Complete",
+            "status": "True",
+            "reason": "CompletionsReached",
+            "categories": []
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "reason": "Scheduled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Scheduled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulling",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Scheduled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulling",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "SuccessfulCreate",
+        "object_kind": "ReplicaSet",
+        "categories": []
+      },
+      {
+        "reason": "SuccessfulCreate",
+        "object_kind": "ReplicaSet",
+        "categories": []
+      },
+      {
+        "reason": "SuccessfulCreate",
+        "object_kind": "ReplicaSet",
+        "categories": []
+      },
+      {
+        "reason": "ScalingReplicaSet",
+        "object_kind": "Deployment",
+        "categories": []
+      },
+      {
+        "reason": "NoPods",
+        "object_kind": "PodDisruptionBudget",
+        "categories": []
+      },
+      {
+        "reason": "Scheduled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulling",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulling",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "SuccessfulCreate",
+        "object_kind": "Job",
+        "categories": []
+      },
+      {
+        "reason": "Completed",
+        "object_kind": "Job",
+        "categories": []
+      },
+      {
+        "reason": "WaitForFirstConsumer",
+        "object_kind": "PersistentVolumeClaim",
+        "categories": []
+      },
+      {
+        "reason": "ExternalProvisioning",
+        "object_kind": "PersistentVolumeClaim",
+        "categories": []
+      },
+      {
+        "reason": "Provisioning",
+        "object_kind": "PersistentVolumeClaim",
+        "categories": []
+      },
+      {
+        "reason": "ProvisioningSucceeded",
+        "object_kind": "PersistentVolumeClaim",
+        "categories": []
+      },
+      {
+        "reason": "Scheduled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      }
+    ],
+    "database": {
+      "instances": 3,
+      "ready_instances": 3,
+      "phase": "Cluster in healthy state",
+      "conditions": [
+        {
+          "type": "Initialized",
+          "status": "True",
+          "reason": "BootstrapCompleted",
+          "categories": []
+        },
+        {
+          "type": "ConsistentSystemID",
+          "status": "True",
+          "reason": "Unique",
+          "categories": []
+        },
+        {
+          "type": "Ready",
+          "status": "True",
+          "reason": "ClusterIsReady",
+          "categories": []
+        },
+        {
+          "type": "ContinuousArchiving",
+          "status": "True",
+          "reason": "ContinuousArchivingSuccess",
+          "categories": []
+        }
+      ]
+    }
+  },
+  "finished_at": "2026-10-06T09:16:41.662475+00:00"
+}

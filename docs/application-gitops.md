@@ -13,6 +13,15 @@ identity and RBAC; the impersonated app reconciler owns only migration/app objec
 The dependency graph waits for ready database instances, then migration completion,
 then applications. The harness observes actual migration and deployment timestamps.
 
+The local root uses an explicit Deployment CEL health check requiring current
+observed generation and all desired replicas updated, ready and available. Flux's
+default Deployment status reader recursively reads ReplicaSets/Pods, which the
+minimal writer Role intentionally does not allow. The CEL reader uses Deployment
+status without adding those permissions; the harness separately checks real ready
+replicas and golden reports. Wait/dependencies remain enabled. This is a deliberate
+local root health extension; generic cloud roots still need an equivalent reviewed
+health contract or scoped read-only health permissions before activation.
+
 An explicit local network overlay preserves default-deny while allowing operator
 status access (8000), DB/operator/app PostgreSQL traffic (5432), scoped DNS and DB
 access to only this kind cluster's observed API service/endpoint /32 addresses.

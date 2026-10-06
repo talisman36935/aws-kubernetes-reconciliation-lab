@@ -35,6 +35,12 @@ class WorkloadFixtureTests(unittest.TestCase):
                 self.assertEqual(spec["serviceAccountName"], "report-reconciler")
                 self.assertEqual(spec["dependsOn"], [{"name": graph[index - 1]["metadata"]["name"]}])
         denied = json.loads((FIXTURE / "denied/resources.json").read_text())["items"]
+        health = graph[2]["spec"]["healthCheckExprs"][0]
+        self.assertEqual(health["kind"], "Deployment")
+        self.assertIn("status.observedGeneration == metadata.generation", health["current"])
+        self.assertIn("status.updatedReplicas == spec.replicas", health["current"])
+        self.assertIn("status.readyReplicas == spec.replicas", health["current"])
+        self.assertIn("status.availableReplicas == spec.replicas", health["current"])
         self.assertEqual(denied, [{"apiVersion": "v1", "kind": "Namespace",
                                    "metadata": {"name": "report-forbidden"}}])
         overlay = json.loads((FIXTURE / "local-network/resources.json").read_text())["items"]
