@@ -1,0 +1,64 @@
+{
+  "verification": "hosted-kind-flux",
+  "result": "passed",
+  "started_at": "2026-10-06T19:52:37.905211+00:00",
+  "finished_at": "2026-10-06T19:58:56.332860+00:00",
+  "baseline_revision": "bba5671e7d0c741445da0b272563729d754affc0",
+  "candidate_revision": "bed9efd1e2e0d563078f5535b9b5be8e2f88127d",
+  "baseline_application_source": "32c98ffd9cacb528c2d017f7ea39b54536ca2211",
+  "application_source": "3b1abf3b791b4ab95f852c860786ca91d8c0a381",
+  "baseline_image": "ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5",
+  "image": "ghcr.io/talisman36935/report-workshop@sha256:dfba95425f82b619987f307e63e2e2720f9395a5a2c7836ec2d2a25f7d398d23",
+  "cloud_provisioned": false,
+  "network_policy_enforced": true,
+  "simulation": "three labelled workers on one host; local NetworkPolicy allow/deny probes",
+  "configuration_rollback_only": false,
+  "application_source_rollback": true,
+  "phases": [
+    {
+      "phase": "baseline",
+      "revision": "bba5671e7d0c741445da0b272563729d754affc0",
+      "application_source": "32c98ffd9cacb528c2d017f7ea39b54536ca2211",
+      "image": "ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5",
+      "jobs": ["5edfb0945a9cc7f87b80e73e77c37ece", "dc298558b9db5be180a06c1c248fe390", "7c0ccbe73b39dded12381f9332c45e5c"]
+    },
+    {
+      "phase": "candidate",
+      "revision": "bed9efd1e2e0d563078f5535b9b5be8e2f88127d",
+      "application_source": "3b1abf3b791b4ab95f852c860786ca91d8c0a381",
+      "image": "ghcr.io/talisman36935/report-workshop@sha256:dfba95425f82b619987f307e63e2e2720f9395a5a2c7836ec2d2a25f7d398d23",
+      "jobs": ["73a4d5b47a5d5c10c69903c8ede8dd85", "3d65a06a902aff36bd0b787c925c069b", "d1472410ac98ec1e2da7a0f4f12655b5"]
+    },
+    {
+      "phase": "rollback",
+      "revision": "bba5671e7d0c741445da0b272563729d754affc0",
+      "application_source": "32c98ffd9cacb528c2d017f7ea39b54536ca2211",
+      "image": "ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5",
+      "jobs": ["191d736a431ec90f905508d3194ded0a", "6be2b8979bc590142473254549cdec3e", "3608f6c692843e7ad6ab550e36741c0b"]
+    },
+    {
+      "phase": "drift-repaired",
+      "revision": "bba5671e7d0c741445da0b272563729d754affc0",
+      "application_source": "32c98ffd9cacb528c2d017f7ea39b54536ca2211",
+      "image": "ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5",
+      "jobs": ["3a8e00d4826eba7c283ae634e9c07ca8", "5c1ad0323f60ecff431c0cb77967d9e9", "24fd0d1f8c9a6b36d537128614d10456"]
+    }
+  ],
+  "permissions": {
+    "configmaps": true,
+    "deployments.apps": true,
+    "secrets": false,
+    "serviceaccounts": false,
+    "roles.rbac.authorization.k8s.io": false,
+    "namespaces": false,
+    "clusterroles": false
+  },
+  "controller_denial": {"ready": false, "reason": "ReconciliationFailed", "forbidden_observed": true},
+  "migration_before_apps": true,
+  "cluster_deleted": true,
+  "errors": [],
+  "network_probes": {
+    "allowed": {"exit_code": 0, "expected": 0, "target": "report-db-rw:5432"},
+    "denied": {"exit_code": 2, "expected": 2, "target": "report-db-rw:5432"}
+  }
+}

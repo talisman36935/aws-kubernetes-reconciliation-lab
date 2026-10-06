@@ -1,15 +1,21 @@
 # Hosted application release and GitOps experiment
 
-Latest run: [37496120127](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37496120127)
-passed against GCP source `32c98ffd9cacb528c2d017f7ea39b54536ca2211` and image
+Latest run: [37522142251](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37522142251)
+passed against baseline `bba5671e7d0c741445da0b272563729d754affc0` and candidate
+`bed9efd1e2e0d563078f5535b9b5be8e2f88127d`. It promoted GCP source
+`3b1abf3b791b4ab95f852c860786ca91d8c0a381` and image
+`ghcr.io/talisman36935/report-workshop@sha256:dfba95425f82b619987f307e63e2e2720f9395a5a2c7836ec2d2a25f7d398d23`,
+then rolled back to source `32c98ffd9cacb528c2d017f7ea39b54536ca2211` and image
 `ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5`.
-The baseline and app-only candidate passed AWS Validate runs
-`37495547945` / `37495581270`. The allowlisted 12-job result is archived at
-[`observations/372f432/workload-gitops.json`](observations/372f432/workload-gitops.json).
-This run proves local hosted-kind/Flux behavior only; it provisions no cloud resources.
-The next candidate advances both immutable application source and image; the
-release-upgrade harness will verify candidate promotion, rollback to the prior
-source/image, retained reports and drift repair. That qualification is pending.
+The allowlisted twelve-job result, with exact pins in all four phases, is archived
+at [`observations/bed9efd/workload-gitops.json`](observations/bed9efd/workload-gitops.json).
+AWS Validate passed at `37521913969`. The experiment also retained prior reports,
+proved migration ordering, direct and controller RBAC denial, local network
+allow/deny behavior, drift repair and named-cluster cleanup. It provisions no
+cloud resources; this is hosted kind/Flux evidence, not AWS/EKS qualification.
+
+The prior configuration-only run [37496120127](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37496120127)
+remains archived at [`observations/372f432/workload-gitops.json`](observations/372f432/workload-gitops.json).
 
 The prior qualified pin's run [37482370289](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37482370289)
 and sanitized result remain archived at [the 18c7015 observation](observations/18c7015/qualification.md).

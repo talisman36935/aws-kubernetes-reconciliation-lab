@@ -8,9 +8,13 @@ The current candidate pin is GCP source `3b1abf3b791b4ab95f852c860786ca91d8c0a38
 image index `ghcr.io/talisman36935/report-workshop@sha256:dfba95425f82b619987f307e63e2e2720f9395a5a2c7836ec2d2a25f7d398d23`.
 That exact source passed GCP Validate (`37517856995`) and publish/native-ARM/
 Kubernetes HA qualification (`37518413015`). Anonymous verification checked
-AMD64/ARM64 runtime content. The new pin is staged for AWS fixture validation and
-hosted application GitOps requalification; the previous qualified AWS record is
-archived at
+AMD64/ARM64 runtime content. AWS fixture validation passed at
+[37521913969](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37521913969).
+The hosted promotion/rollback experiment passed at
+[37522142251](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37522142251);
+its exact per-phase source/image and gate results are in
+[`observations/bed9efd/workload-gitops.json`](observations/bed9efd/workload-gitops.json).
+The previous qualified AWS record is archived at
 [`observations/372f432/workload-gitops.json`](observations/372f432/workload-gitops.json).
 Prior AWS delivery runs remain historical evidence. None of these runs is live AWS
 or EKS/CAPA/ACK qualification.
