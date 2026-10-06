@@ -12,7 +12,7 @@
       "Type": "Number",
       "MinValue": 0.01,
       "MaxValue": 5,
-      "Description": "Gross monthly limit in GBP; never exceed the approved per-run ceiling."
+      "Description": "Gross monthly alert threshold in GBP; this is not a spending cap."
     },
     "BudgetCurrency": {
       "Type": "String",

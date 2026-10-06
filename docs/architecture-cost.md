@@ -58,7 +58,7 @@ approximately $0.11/$0.10 for 30 minutes at steady topology. The 8 GiB fallbacks
 are approximately $0.3256/hour AWS and $0.30103426/hour GCP before other services.
 These are NOT complete run estimates: add disks, HA database, NAT/IPs/LBs, transfer,
 telemetry, Config Sync feature fees where applicable, queues/storage, registry,
-retained bootstrap and provisioning/deletion/surge-node time.
+temporary identity/alert bootstrap and provisioning/deletion/surge-node time.
 
 Start on-demand for repeatable qualification. Compare live Spot offers for a
 separate interruption profile, not a fixed assumed discount. Burstable AWS CPU
@@ -95,9 +95,11 @@ Configure layered notifications before activation:
   boundaries, and can notify after usage. Only use this alarm in a dedicated or
   otherwise understood account; unrelated spend can trigger it and lab spend can
   be hidden by activity elsewhere if the limit is raised.
-- The not-yet-built cloud lifecycle workflow must send notices (created, ready,
-  15 minutes to expiry, teardown started, teardown/audit passed or failed) to the
-  same provider-specific mailbox.
+- The not-yet-built cloud lifecycle workflow must use the provider event publisher
+  for notices (created, ready, 15 minutes to expiry, teardown started,
+  teardown/audit passed or failed) to the same provider-specific mailbox. AWS SNS
+  publishing is implemented but not yet scheduled or connected to a cloud run;
+  delivery has not been tested.
 - At 75% of the pre-run ceiling, stop optional tests and begin teardown. At 90%,
   fail the run and force teardown. At expiry, the independent janitor deletes the
   run even if the orchestrator is unavailable. Alert delivery failure is a

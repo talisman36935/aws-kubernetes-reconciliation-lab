@@ -49,3 +49,7 @@ test evidence, not the final versioned portfolio evidence bundle.
 Next: complete controller/ACK compatibility qualification, credential lifetime
 design and externally durable run inventory; implement independent cleanup before
 qualifying a bounded AWS create/run/delete cycle. No cloud readiness is claimed.
+
+The SNS lifecycle publisher now emits six allowlisted run events through the
+parameterized alert topic. It is a notification adapter only; no scheduler,
+cloud-run workflow or independent janitor exists, and delivery is unqualified.

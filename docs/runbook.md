@@ -52,6 +52,16 @@ keys in chat. This reminder does not block independent credential-free work.
 5. Implement an independently operated janitor and scoped provider-side audit.
 6. Record readiness conditions and assert a full create/workload/delete slice.
 
+The [`lifecycle/notify.py`](../lifecycle/notify.py) helper publishes the
+allowlisted `created`, `ready`, `expiry-warning`, `teardown-started`,
+`teardown-passed` and `teardown-failed` events to the run's SNS topic. The
+provisioning workflow must call it at each transition, including the 15-minute
+expiry warning. No scheduler, cloud-run workflow or independent expiry janitor
+exists yet; a publisher alone does not protect against runner loss. Publisher
+delivery and SNS email confirmation must be tested before provisioning.
+The publishing identity should receive only `sns:Publish` on the exact run's
+alerts topic; do not grant account-wide SNS publishing.
+
 There is deliberately no cloud apply workflow or partially functional automatic
 cleanup script. Current kind cleanup is **not an AWS cleanup implementation**.
 
