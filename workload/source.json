@@ -1,7 +1,7 @@
 {
   "repository": "https://github.com/talisman36935/gcp-platform-delivery-lab.git",
-  "revision": "6a6e522b0f67925e2e5fab476c61350582aadf1e",
+  "revision": "0e0a6133a18e4cfb10aae4defabd5b8f52ec69b5",
   "directory": "workload",
-  "image_digest": "ghcr.io/talisman36935/report-workshop@sha256:ff32688b7c8f2764ea46a32e8813d8e45585615d494c116324dfc5f2b7307d9f",
-  "status": "Public AMD64/ARM64 image; native ARM smoke and hosted Kubernetes PostgreSQL promotion/node-loss qualification passed; AWS cloud deployment not verified"
+  "image_digest": "ghcr.io/talisman36935/report-workshop@sha256:505f63c5428ef76ccbd39389b623962f8abc3bc72e73bc73b1b5cfcf70bcc23a",
+  "status": "Cloud adapters and schema-check capabilities; public AMD64/ARM64 image, native ARM smoke and hosted Kubernetes PostgreSQL promotion/node-loss qualified in 37398470462; live cloud and GitOps application deployment not verified"
 }
