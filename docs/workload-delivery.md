@@ -4,6 +4,10 @@ The shared source owns the Pub/Sub/GCS and SQS/S3 adapters and delivery renderer
 AWS consumes its immutable source and image in `workload/source.json`; it does not
 maintain a second application implementation. The delivery entry point requires
 a clean checkout of exactly that commit and a release record matching both pins.
+The current pin is GCP source `f531d2609bbd02c011af6028184eb80d393ee07e` and
+image index `ghcr.io/talisman36935/report-workshop@sha256:0706b71b0771970044a927a3f9ab7c0552ec663c1c96affefdcdcb2d41e61a1e`.
+That exact source passed GCP Validate and hosted native ARM/Kubernetes HA
+qualification (run `37479625942`); this is not AWS runtime or cloud qualification.
 
 ```sh
 python3 scripts/render-workload-delivery.py \
@@ -17,7 +21,11 @@ No keys, session tokens or signed URLs belong in the handoff. This command never
 creates cloud resources, changes a Git root or applies Kubernetes objects.
 
 The generated root graph uses `platform -> migrations -> apps`, ready-instance DB
-health, read-only schema init gates and namespace-scoped application impersonation.
+health, a Deployment health gate requiring observed generation plus updated,
+ready and available replica counts to match desired replicas, read-only schema
+init gates and namespace-scoped application impersonation. The opt-in local AWS
+fixture checker enforces exact CEL parity with the shared renderer and rejects
+missing or weakened health checks.
 Platform owns database, workload identity, quota and default-deny policy. App rights
 exclude Secrets, ServiceAccounts, RBAC and cluster resources. Existing Flux roots
 remain contract-only. Provider/CNI/API/peer/metadata/telemetry policies and workload

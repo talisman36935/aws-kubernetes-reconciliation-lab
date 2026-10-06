@@ -9,6 +9,25 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "management/workload-test"
+DEPLOYMENT_HEALTH_EXPRESSION = (
+    "has(status.observedGeneration) && has(status.updatedReplicas) "
+    "&& has(status.readyReplicas) && has(status.availableReplicas) "
+    "&& status.observedGeneration == metadata.generation "
+    "&& status.updatedReplicas == spec.replicas "
+    "&& status.readyReplicas == spec.replicas "
+    "&& status.availableReplicas == spec.replicas"
+)
+
+
+def verify_root_health(root_items):
+    report_apps = [item for item in root_items
+                   if item.get("kind") == "Kustomization"
+                   and item.get("metadata", {}).get("name") == "report-apps"]
+    expected = [{"apiVersion": "apps/v1", "kind": "Deployment",
+                 "current": DEPLOYMENT_HEALTH_EXPRESSION}]
+    if (len(report_apps) != 1
+            or report_apps[0].get("spec", {}).get("healthCheckExprs") != expected):
+        raise ValueError("report-apps Deployment health check differs from shared renderer contract")
 
 
 def verify(shared_source: Path):
@@ -26,6 +45,8 @@ def verify(shared_source: Path):
                "capabilities": ["schema-check", "cloud-queue-object-v1"]}
     expected = module.render(release=release, owner="flux", namespace="report-gitops",
                              storage_class="standard")
+    root_items = json.loads((FIXTURE / "root/resources.json").read_text())["items"]
+    verify_root_health(root_items)
     for group in ("platform", "migrations", "apps"):
         actual = json.loads((FIXTURE / group / "resources.json").read_text())["items"]
         if group == "apps":

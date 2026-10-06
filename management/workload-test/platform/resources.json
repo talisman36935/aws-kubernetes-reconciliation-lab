@@ -114,7 +114,7 @@
           "app.kubernetes.io/name": "report-workshop"
         },
         "annotations": {
-          "portfolio.whitt.uk/source-revision": "0e0a6133a18e4cfb10aae4defabd5b8f52ec69b5"
+          "portfolio.whitt.uk/source-revision": "f531d2609bbd02c011af6028184eb80d393ee07e"
         }
       },
       "automountServiceAccountToken": false
