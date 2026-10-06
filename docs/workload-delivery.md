@@ -4,12 +4,14 @@ The shared source owns the Pub/Sub/GCS and SQS/S3 adapters and delivery renderer
 AWS consumes its immutable source and image in `workload/source.json`; it does not
 maintain a second application implementation. The delivery entry point requires
 a clean checkout of exactly that commit and a release record matching both pins.
-The current pin is GCP source `f531d2609bbd02c011af6028184eb80d393ee07e` and
-image index `ghcr.io/talisman36935/report-workshop@sha256:0706b71b0771970044a927a3f9ab7c0552ec663c1c96affefdcdcb2d41e61a1e`.
-That exact source passed GCP Validate and hosted native ARM/Kubernetes HA
-qualification (run `37479625942`). The AWS fixture now passes its hosted
-promotion/rollback experiment (run `37482370289`); neither run is live AWS or
-EKS/CAPA/ACK qualification.
+The current pin is GCP source `32c98ffd9cacb528c2d017f7ea39b54536ca2211` and
+image index `ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5`.
+That exact source passed GCP Validate (`37493189725`) and hosted native ARM /
+Kubernetes HA qualification (`37493759179`). Anonymous pulls verified the public
+AMD64 and ARM64 image contents. AWS fixture parity and hosted application GitOps
+qualification against this new pin are in progress; the prior pin passed hosted
+promotion/rollback (`37482370289`). None of these runs is live AWS or EKS/CAPA/ACK
+qualification.
 
 ```sh
 python3 scripts/render-workload-delivery.py \
@@ -28,6 +30,12 @@ ready and available replica counts to match desired replicas, read-only schema
 init gates and namespace-scoped application impersonation. The opt-in local AWS
 fixture checker enforces exact CEL parity with the shared renderer and rejects
 missing or weakened health checks.
+The shared source now assigns separate `report-api`, `report-worker` and
+`report-migrate` Kubernetes service accounts, with token automount disabled for
+each; provider workload identity is worker-only in cloud profiles. The AWS local
+fixture carries the account separation but no cloud annotations, projected cloud
+tokens, or cloud credentials. This is manifest-level separation, not live IAM
+qualification.
 Platform owns database, workload identity, quota and default-deny policy. App rights
 exclude Secrets, ServiceAccounts, RBAC and cluster resources. Existing Flux roots
 remain contract-only. Provider/CNI/API/peer/metadata/telemetry policies and workload

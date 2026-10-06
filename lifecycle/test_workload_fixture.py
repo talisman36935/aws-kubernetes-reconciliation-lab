@@ -17,9 +17,12 @@ class WorkloadFixtureTests(unittest.TestCase):
     def test_disjoint_ownership_pins_and_migration_order(self):
         lock = json.loads((ROOT / "workload/source.json").read_text())
         identities = set()
+        service_accounts = {}
         for group in ("platform", "migrations", "apps"):
             objects = json.loads((FIXTURE / group / "resources.json").read_text())["items"]
             for obj in objects:
+                if obj["kind"] == "ServiceAccount":
+                    service_accounts[obj["metadata"]["name"]] = obj
                 identity = (obj["apiVersion"], obj["kind"],
                             obj["metadata"].get("namespace"), obj["metadata"]["name"])
                 self.assertNotIn(identity, identities)
@@ -31,6 +34,15 @@ class WorkloadFixtureTests(unittest.TestCase):
                         self.assertEqual(container["image"], lock["image_digest"])
                     if obj["kind"] == "Deployment":
                         self.assertEqual(pod["initContainers"][0]["args"], ["schema-check"])
+                        role = obj["metadata"]["name"].removeprefix("report-")
+                        self.assertEqual(pod["serviceAccountName"], "report-" + role)
+        self.assertEqual(set(service_accounts), {
+            "report-api", "report-worker", "report-migrate", "report-reconciler"})
+        for account in service_accounts.values():
+            self.assertIs(account["automountServiceAccountToken"], False)
+        migration = json.loads((FIXTURE / "migrations/resources.json").read_text())["items"][0]
+        self.assertEqual(migration["spec"]["template"]["spec"]["serviceAccountName"],
+                         "report-migrate")
         graph = json.loads((FIXTURE / "root/resources.json").read_text())["items"]
         for index, group in enumerate(("platform", "migrations", "apps")):
             spec = graph[index]["spec"]

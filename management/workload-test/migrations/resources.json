@@ -6,13 +6,13 @@
       "apiVersion": "batch/v1",
       "kind": "Job",
       "metadata": {
-        "name": "report-migrate-f531d2609bbd",
+        "name": "report-migrate-32c98ffd9cac",
         "namespace": "report-gitops",
         "labels": {
           "app.kubernetes.io/name": "report-workshop"
         },
         "annotations": {
-          "portfolio.whitt.uk/source-revision": "f531d2609bbd02c011af6028184eb80d393ee07e"
+          "portfolio.whitt.uk/source-revision": "32c98ffd9cacb528c2d017f7ea39b54536ca2211"
         }
       },
       "spec": {
@@ -27,7 +27,7 @@
           },
           "spec": {
             "restartPolicy": "Never",
-            "serviceAccountName": "report-workshop",
+            "serviceAccountName": "report-migrate",
             "automountServiceAccountToken": false,
             "securityContext": {
               "runAsNonRoot": true,
@@ -39,7 +39,7 @@
             "containers": [
               {
                 "name": "migrate",
-                "image": "ghcr.io/talisman36935/report-workshop@sha256:0706b71b0771970044a927a3f9ab7c0552ec663c1c96affefdcdcb2d41e61a1e",
+                "image": "ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5",
                 "args": [
                   "migrate"
                 ],

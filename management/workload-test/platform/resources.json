@@ -108,13 +108,43 @@
       "apiVersion": "v1",
       "kind": "ServiceAccount",
       "metadata": {
-        "name": "report-workshop",
+        "name": "report-api",
         "namespace": "report-gitops",
         "labels": {
           "app.kubernetes.io/name": "report-workshop"
         },
         "annotations": {
-          "portfolio.whitt.uk/source-revision": "f531d2609bbd02c011af6028184eb80d393ee07e"
+          "portfolio.whitt.uk/source-revision": "32c98ffd9cacb528c2d017f7ea39b54536ca2211"
+        }
+      },
+      "automountServiceAccountToken": false
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ServiceAccount",
+      "metadata": {
+        "name": "report-worker",
+        "namespace": "report-gitops",
+        "labels": {
+          "app.kubernetes.io/name": "report-workshop"
+        },
+        "annotations": {
+          "portfolio.whitt.uk/source-revision": "32c98ffd9cacb528c2d017f7ea39b54536ca2211"
+        }
+      },
+      "automountServiceAccountToken": false
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ServiceAccount",
+      "metadata": {
+        "name": "report-migrate",
+        "namespace": "report-gitops",
+        "labels": {
+          "app.kubernetes.io/name": "report-workshop"
+        },
+        "annotations": {
+          "portfolio.whitt.uk/source-revision": "32c98ffd9cacb528c2d017f7ea39b54536ca2211"
         }
       },
       "automountServiceAccountToken": false
