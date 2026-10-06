@@ -290,7 +290,10 @@ def main():
                    "lifecycle/test_workload_fixture.py", "lifecycle/test_workload_observation.py",
                    "lifecycle/test_gitops_diagnostics.py",
                    "docs/workload-delivery.md", "docs/application-gitops.md",
-                   "docs/observations/9fa2e75/qualification.md"}
+                   "docs/observations/9fa2e75/qualification.md",
+                   "docs/observations/372f432/qualification.md",
+                   "docs/observations/372f432/workload-gitops.json",
+                   "docs/observations/aa66120/qualification.md"}
         changed = set(run("git", "diff", "--name-only", args.baseline, args.candidate).splitlines())
         if not changed or not changed <= allowed:
             parser.error("release promotion changes exceed the reviewed source lock/derived-fixture scope")

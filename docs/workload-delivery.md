@@ -19,7 +19,7 @@ The local `management/workload-test` platform/migration/app resources are derive
 from the locked shared renderer. When advancing the lock, check out that exact
 clean shared commit and run `scripts/check-workload-fixture.py --shared-source
 PATH --write`; this regenerates only those shared-derived groups and retains the
-explicit baseline test marker. The root health contract and local network/denial
+explicit candidate test marker. The root health contract and local network/denial
 overlays remain separately owned and unchanged. The same command without `--write`
 is the parity check used by Validate.
 

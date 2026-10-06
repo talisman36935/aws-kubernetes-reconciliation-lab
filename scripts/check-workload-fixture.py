@@ -54,10 +54,10 @@ def write_fixture(expected):
     for obj in apps:
         if obj.get("kind") == "Deployment":
             annotations = obj["spec"]["template"]["metadata"].setdefault("annotations", {})
-            annotations["portfolio.whitt.uk/config-release"] = "baseline"
+            annotations["portfolio.whitt.uk/config-release"] = "candidate"
     apps.append({"apiVersion": "v1", "kind": "ConfigMap",
                  "metadata": {"name": "delivery-release", "namespace": "report-gitops"},
-                 "data": {"release": "baseline"}})
+                 "data": {"release": "candidate"}})
     for group, items in expected.items():
         if not isinstance(items, list):
             continue
@@ -93,6 +93,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--shared-source", type=Path, required=True)
     parser.add_argument("--write", action="store_true",
-                        help="regenerate the shared-derived groups with baseline test markers")
+                        help="regenerate the shared-derived groups with candidate test markers")
     args = parser.parse_args()
     verify(args.shared_source, write=args.write)
