@@ -164,7 +164,7 @@ def network_probes():
     """Require allowed TCP success and default-denied TCP failure after warmup."""
     address = str(ipaddress.IPv4Address(get("service", "report-db-rw")["spec"]["clusterIP"]))
     result = {}
-    for label, expected in (("allowed", 0), ("denied", 1)):
+    for label, expected in (("allowed", 0), ("denied", 2)):
         name = "report-network-" + label
         kube("apply", "-f", "-", data=json.dumps({
             "apiVersion": "v1", "kind": "Pod", "metadata": {"name": name,
@@ -175,7 +175,7 @@ def network_probes():
                                     "seccompProfile": {"type": "RuntimeDefault"}},
                 "containers": [{"name": "probe",
                     "image": "postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
-                    "command": ["sh", "-c", 'sleep 5; nc -z -w 2 "$TARGET" 5432'],
+                    "command": ["sh", "-c", 'sleep 5; exec pg_isready -h "$TARGET" -p 5432 -U workshop -d workshop -t 2'],
                     "env": [{"name": "TARGET", "value": address}],
                     "resources": {"requests": {"cpu": "10m", "memory": "16Mi"},
                                   "limits": {"cpu": "100m", "memory": "64Mi"}},
