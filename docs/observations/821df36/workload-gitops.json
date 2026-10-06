@@ -1,0 +1,87 @@
+{
+  "verification": "hosted-kind-flux",
+  "result": "passed",
+  "started_at": "2026-10-06T09:24:09.163675+00:00",
+  "baseline_revision": "e338078bf53da0195033299c8a1dccd03f31d638",
+  "candidate_revision": "821df36881e03ae80545ff9dcbc298b0da052c80",
+  "application_source": "0e0a6133a18e4cfb10aae4defabd5b8f52ec69b5",
+  "image": "ghcr.io/talisman36935/report-workshop@sha256:505f63c5428ef76ccbd39389b623962f8abc3bc72e73bc73b1b5cfcf70bcc23a",
+  "cloud_provisioned": false,
+  "network_policy_enforced": true,
+  "simulation": "three labelled workers on one host; local NetworkPolicy allow/deny probes",
+  "configuration_rollback_only": true,
+  "phases": [
+    {
+      "phase": "baseline",
+      "revision": "e338078bf53da0195033299c8a1dccd03f31d638",
+      "jobs": [
+        "f48bb905d434182140e2c12b35ebb75b",
+        "adcf4e28b9f6382bcaeaf4787c0965ba",
+        "5a78d00c1b6b70d438057fdc2cd2474d",
+        "0e92cd5696c2e48a0512c882717e2bd8",
+        "c0ee39dc0d6b4ca893afd3e4dae2ec17",
+        "969331115c0f607cbf45faff4aa8b045",
+        "db4e8bfaea515cd1a6af1533b8fbfded",
+        "9e92d95e23204c5c93e03f8643103e87",
+        "59b79ad2e47ecf1b859a9618e32b7895"
+      ]
+    },
+    {
+      "phase": "candidate",
+      "revision": "821df36881e03ae80545ff9dcbc298b0da052c80",
+      "jobs": [
+        "0e92cd5696c2e48a0512c882717e2bd8",
+        "c0ee39dc0d6b4ca893afd3e4dae2ec17",
+        "969331115c0f607cbf45faff4aa8b045"
+      ]
+    },
+    {
+      "phase": "rollback",
+      "revision": "e338078bf53da0195033299c8a1dccd03f31d638",
+      "jobs": [
+        "db4e8bfaea515cd1a6af1533b8fbfded",
+        "9e92d95e23204c5c93e03f8643103e87",
+        "59b79ad2e47ecf1b859a9618e32b7895"
+      ]
+    },
+    {
+      "phase": "drift-repaired",
+      "revision": "e338078bf53da0195033299c8a1dccd03f31d638",
+      "jobs": [
+        "c060e549f29b4124f337dd57adc1fa92",
+        "4d1e0025402a6df3a92c326ea41d050a",
+        "18cb41cd497372dbad1be844ff93a2e0"
+      ]
+    }
+  ],
+  "permissions": {
+    "configmaps": true,
+    "deployments.apps": true,
+    "secrets": false,
+    "serviceaccounts": false,
+    "roles.rbac.authorization.k8s.io": false,
+    "namespaces": false,
+    "clusterroles": false
+  },
+  "controller_denial": {
+    "ready": false,
+    "reason": "ReconciliationFailed",
+    "forbidden_observed": true
+  },
+  "migration_before_apps": true,
+  "cluster_deleted": true,
+  "errors": [],
+  "network_probes": {
+    "allowed": {
+      "exit_code": 0,
+      "expected": 0,
+      "target": "report-db-rw:5432"
+    },
+    "denied": {
+      "exit_code": 2,
+      "expected": 2,
+      "target": "report-db-rw:5432"
+    }
+  },
+  "finished_at": "2026-10-06T09:30:01.888752+00:00"
+}

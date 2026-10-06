@@ -49,6 +49,8 @@ jobs:
           BASELINE: ${{ inputs.baseline_revision }}
           CANDIDATE: ${{ inputs.candidate_revision }}
         run: python3 scripts/qualify-workload-gitops.py --baseline "$BASELINE" --candidate "$CANDIDATE"
+      - name: Independently validate observation shape and complete gates
+        run: python3 scripts/validate-workload-observation.py output/workload-gitops.json
       - name: Retain allowlisted observation
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

@@ -11,6 +11,12 @@ SPEC.loader.exec_module(MODULE)
 
 
 class DiagnosticsTests(unittest.TestCase):
+    def test_phase_records_are_independent_snapshots(self):
+        jobs = ["a" * 32]
+        phase = MODULE.phase_record("baseline", "b" * 40, jobs)
+        jobs += ["c" * 32]
+        self.assertEqual(phase["jobs"], ["a" * 32])
+
     def test_raw_messages_and_credentials_are_not_returned(self):
         message = "secret=private-dummy must specify requests.cpu; forbidden"
         self.assertEqual(MODULE.categories(message), ["forbidden", "quota-missing-compute"])

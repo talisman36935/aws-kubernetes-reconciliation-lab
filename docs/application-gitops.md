@@ -55,6 +55,10 @@ Secrets, raw command errors, controller messages and logs do not. A cleanup fail
 cannot produce pass. The harness refuses an existing named cluster, restores the
 prior kubeconfig environment and deletes only its own disposable cluster. Hosted
 runner expiry is a fallback, not the cloud janitor/independent cleanup owner.
+An independent validator rejects unknown/private fields, missing gates, aliased or
+duplicate phase jobs, incorrect rollback revisions and missing allow/deny probes.
+Each phase must contain exactly three unique jobs (twelve across the run). This
+structural check is not cryptographic provenance or the future signed Labs bundle.
 
 Modern kind has built-in NetworkPolicy support; the original assumption that it
 did not enforce policies was incorrect and contributed to the first failed runs.

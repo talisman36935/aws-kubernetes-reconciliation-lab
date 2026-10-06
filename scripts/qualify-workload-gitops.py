@@ -33,6 +33,11 @@ def stamp():
     return datetime.now(timezone.utc).isoformat()
 
 
+def phase_record(phase, revision, jobs):
+    """Snapshot the phase rather than aliasing the growing preserved-job list."""
+    return {"phase": phase, "revision": revision, "jobs": list(jobs)}
+
+
 def run(*args, data=None, timeout=90):
     return subprocess.run(args, input=data, check=True, capture_output=True,
                           text=True, timeout=timeout).stdout.strip()
@@ -338,16 +343,16 @@ def main():
                     raise ValueError("application deployed before migration completion")
             record["migration_before_apps"] = True
             jobs = smoke("baseline", lock["image_digest"], [])
-            record["phases"].append({"phase": "baseline", "revision": args.baseline, "jobs": jobs})
+            record["phases"].append(phase_record("baseline", args.baseline, jobs))
             stage = "candidate-reconciliation"
             reconcile(args.candidate)
             new = smoke("candidate", lock["image_digest"], jobs)
-            record["phases"].append({"phase": "candidate", "revision": args.candidate, "jobs": new})
+            record["phases"].append(phase_record("candidate", args.candidate, new))
             jobs += new
             stage = "rollback-reconciliation"
             reconcile(args.baseline)
             new = smoke("baseline", lock["image_digest"], jobs)
-            record["phases"].append({"phase": "rollback", "revision": args.baseline, "jobs": new})
+            record["phases"].append(phase_record("rollback", args.baseline, new))
             jobs += new
             stage = "drift-repair"
             kube("-n", NAMESPACE, "patch", "configmap", "delivery-release", "--type=merge",
@@ -357,7 +362,7 @@ def main():
                      "portfolio.whitt.uk/config-release": "out-of-band"}}}}}))
             reconcile(args.baseline)
             new = smoke("baseline", lock["image_digest"], jobs)
-            record["phases"].append({"phase": "drift-repaired", "revision": args.baseline, "jobs": new})
+            record["phases"].append(phase_record("drift-repaired", args.baseline, new))
             stage = "delegated-denial"
             record["permissions"] = permissions()
             kube("apply", "-f", "-", data=json.dumps({
