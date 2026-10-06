@@ -3,6 +3,7 @@
 import argparse
 from datetime import datetime, timezone
 import hashlib
+import ipaddress
 import json
 import os
 from pathlib import Path
@@ -159,6 +160,42 @@ def permissions():
     return result
 
 
+def network_probes():
+    """Require allowed TCP success and default-denied TCP failure after warmup."""
+    address = str(ipaddress.IPv4Address(get("service", "report-db-rw")["spec"]["clusterIP"]))
+    result = {}
+    for label, expected in (("allowed", 0), ("denied", 1)):
+        name = "report-network-" + label
+        kube("apply", "-f", "-", data=json.dumps({
+            "apiVersion": "v1", "kind": "Pod", "metadata": {"name": name,
+                "namespace": NAMESPACE, "labels": {"portfolio.whitt.uk/network-probe": label}},
+            "spec": {"restartPolicy": "Never", "activeDeadlineSeconds": 60,
+                "automountServiceAccountToken": False,
+                "securityContext": {"runAsNonRoot": True, "runAsUser": 65532,
+                                    "seccompProfile": {"type": "RuntimeDefault"}},
+                "containers": [{"name": "probe",
+                    "image": "postgres:18-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873",
+                    "command": ["sh", "-c", 'sleep 5; nc -z -w 2 "$TARGET" 5432'],
+                    "env": [{"name": "TARGET", "value": address}],
+                    "resources": {"requests": {"cpu": "10m", "memory": "16Mi"},
+                                  "limits": {"cpu": "100m", "memory": "64Mi"}},
+                    "securityContext": {"allowPrivilegeEscalation": False,
+                        "readOnlyRootFilesystem": True, "capabilities": {"drop": ["ALL"]}}}]}}))
+        def finished():
+            pod = get("pod", name)
+            states = pod.get("status", {}).get("containerStatuses", [])
+            if states and "terminated" in states[0].get("state", {}):
+                return states[0]["state"]["terminated"]
+            return None
+        state = wait(finished, 120)
+        if state["exitCode"] != expected:
+            raise ValueError("network allow/deny probe did not match policy")
+        result[label] = {"exit_code": state["exitCode"], "expected": expected,
+                         "target": "report-db-rw:5432"}
+        kube("-n", NAMESPACE, "delete", "pod", name, "--wait=true", "--timeout=30s")
+    return result
+
+
 def categories(message):
     """Classify structural failures without exporting the original message."""
     text = message.lower()
@@ -238,6 +275,9 @@ def main():
             path = "management/workload-test/" + group + "/" + filename
             if run("git", "show", args.baseline + ":" + path) != (ROOT / path).read_text().strip():
                 parser.error("only application configuration may differ between revisions")
+    path = "management/workload-test/local-network/resources.json"
+    if run("git", "show", args.baseline + ":" + path) != (ROOT / path).read_text().strip():
+        parser.error("local network overlay must be unchanged between revisions")
     if NAME in run("kind", "get", "clusters").splitlines():
         parser.error("refusing to overwrite an existing cluster")
     output = ROOT / "output/workload-gitops.json"
@@ -249,7 +289,7 @@ def main():
               "candidate_revision": args.candidate, "application_source": lock["revision"],
               "image": lock["image_digest"], "cloud_provisioned": False,
               "network_policy_enforced": False,
-              "simulation": "three labelled workers on one host; kindnet has no policy enforcement",
+              "simulation": "three labelled workers on one host; local NetworkPolicy allow/deny probes",
               "configuration_rollback_only": True, "phases": [], "permissions": {},
               "controller_denial": None, "migration_before_apps": False,
               "cluster_deleted": False, "errors": []}
@@ -278,7 +318,13 @@ def main():
             run("flux", "create", "source", "git", "portfolio",
                 "--url=https://github.com/talisman36935/aws-kubernetes-reconciliation-lab",
                 "--commit=" + args.baseline, "--interval=1m", "--timeout=3m", timeout=200)
-            kube("apply", "-f", str(ROOT / "management/workload-test/root/resources.json"))
+            endpoints = json.loads(kube("-n", "default", "get", "endpoints", "kubernetes", "-o", "json"))
+            endpoint = str(ipaddress.IPv4Address(endpoints["subsets"][0]["addresses"][0]["ip"]))
+            service = str(ipaddress.IPv4Address(get("service", "kubernetes", "default")["spec"]["clusterIP"]))
+            graph = json.loads((ROOT / "management/workload-test/root/resources.json").read_text())
+            graph["items"][0]["spec"]["postBuild"] = {"substitute": {
+                "KIND_API_ENDPOINT": endpoint, "KIND_API_SERVICE": service}}
+            kube("apply", "-f", "-", data=json.dumps(graph))
             # Observe platform-created DB early so failures retain structural
             # admission/storage diagnostics instead of only a Flux wait timeout.
             wait(lambda: get("clusters.postgresql.cnpg.io", "report-db").get(
@@ -324,6 +370,9 @@ def main():
             record["controller_denial"] = wait(denied_condition, 120)
             if "report-forbidden" in kube("get", "namespaces", "-o", "jsonpath={.items[*].metadata.name}").split():
                 raise ValueError("forbidden namespace was created")
+            stage = "network-policy-probes"
+            record["network_probes"] = network_probes()
+            record["network_policy_enforced"] = True
             record["result"] = "passed"
         except Exception as error:
             record["errors"].append({"stage": stage, "category": type(error).__name__})

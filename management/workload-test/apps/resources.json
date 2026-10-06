@@ -37,7 +37,7 @@
               "app.kubernetes.io/component": "api"
             },
             "annotations": {
-              "portfolio.whitt.uk/config-release": "candidate"
+              "portfolio.whitt.uk/config-release": "baseline"
             }
           },
           "spec": {
@@ -293,7 +293,7 @@
               "app.kubernetes.io/component": "worker"
             },
             "annotations": {
-              "portfolio.whitt.uk/config-release": "candidate"
+              "portfolio.whitt.uk/config-release": "baseline"
             }
           },
           "spec": {
@@ -510,7 +510,7 @@
         "namespace": "report-gitops"
       },
       "data": {
-        "release": "candidate"
+        "release": "baseline"
       }
     }
   ]

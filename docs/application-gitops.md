@@ -13,6 +13,12 @@ identity and RBAC; the impersonated app reconciler owns only migration/app objec
 The dependency graph waits for ready database instances, then migration completion,
 then applications. The harness observes actual migration and deployment timestamps.
 
+An explicit local network overlay preserves default-deny while allowing operator
+status access (8000), DB/operator/app PostgreSQL traffic (5432), scoped DNS and DB
+access to only this kind cluster's observed API service/endpoint /32 addresses.
+Bootstrap supplies those nonsecret addresses through Flux post-build substitution;
+the two Git revisions must share the same overlay. This is not a cloud overlay.
+
 The manually dispatched **Qualify application GitOps** workflow requires baseline
 and current-main candidate commits with passing Validate runs. The experiment:
 
@@ -30,6 +36,10 @@ and current-main candidate commits with passing Validate runs. The experiment:
    error and the Namespace must remain absent. This tests direct object rights,
    not comprehensive tenant isolation: deployment rights can mount existing
    namespace secrets and assume existing pod service accounts.
+6. Requires a permitted synthetic pod to reach the DB service on 5432 and a denied
+   pod to fail the same connection after a policy warmup. Probe images are pinned;
+   no database credentials are used. This tests one local allow/deny path, not full
+   network isolation or provider CNI equivalence.
 
 Only allowlisted observations enter `output/workload-gitops.json`; kubeconfigs,
 Secrets, raw command errors, controller messages and logs do not. A cleanup failure
@@ -37,9 +47,10 @@ cannot produce pass. The harness refuses an existing named cluster, restores the
 prior kubeconfig environment and deletes only its own disposable cluster. Hosted
 runner expiry is a fallback, not the cloud janitor/independent cleanup owner.
 
-Kind's default kindnet **does not enforce NetworkPolicy**. The fixture keeps the
-fail-closed candidate policies but this experiment does not qualify them; it is
-not an activated EKS profile. Physical-zone HA, CSI deletion, live IAM/SQS/S3,
+Modern kind has built-in NetworkPolicy support; the original assumption that it
+did not enforce policies was incorrect and contributed to the first failed runs.
+The local overlay and allow/deny probes must pass before claiming local policy
+behavior. This is not an activated EKS profile. Physical-zone HA, CSI deletion, live IAM/SQS/S3,
 Config Sync runtime, Cloud Deploy, binary/schema rollback, cloud budgets/TTL and
 portfolio ingestion remain separate gates. Runtime results must be recorded before
 claiming this experiment passed.
@@ -47,3 +58,4 @@ claiming this experiment passed.
 Impersonation and source pinning follow the operational contracts in the official
 [Flux Kustomization documentation](https://fluxcd.io/flux/components/kustomize/kustomizations/)
 and [GitRepository documentation](https://fluxcd.io/flux/components/source/gitrepositories/).
+Required operator connectivity follows [CNPG 1.30 networking](https://cloudnative-pg.io/docs/1.30/networking/).

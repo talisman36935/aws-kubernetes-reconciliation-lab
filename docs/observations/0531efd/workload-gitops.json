@@ -1,0 +1,505 @@
+{
+  "verification": "hosted-kind-flux",
+  "result": "failed",
+  "started_at": "2026-10-06T08:54:04.618977+00:00",
+  "baseline_revision": "ddb35e0c424c9f6b2002fb31afd7a62afd4754dc",
+  "candidate_revision": "0531efdc33e490261803e71b2daad5bc0033504b",
+  "application_source": "0e0a6133a18e4cfb10aae4defabd5b8f52ec69b5",
+  "image": "ghcr.io/talisman36935/report-workshop@sha256:505f63c5428ef76ccbd39389b623962f8abc3bc72e73bc73b1b5cfcf70bcc23a",
+  "cloud_provisioned": false,
+  "network_policy_enforced": false,
+  "simulation": "three labelled workers on one host; kindnet has no policy enforcement",
+  "configuration_rollback_only": true,
+  "phases": [],
+  "permissions": {},
+  "controller_denial": null,
+  "migration_before_apps": false,
+  "cluster_deleted": true,
+  "errors": [
+    {
+      "stage": "baseline-reconciliation",
+      "category": "TimeoutError"
+    }
+  ],
+  "diagnostics": {
+    "pods": [
+      {
+        "name": "report-db-1",
+        "phase": "Running",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker2",
+        "containers": [
+          {
+            "name": "bootstrap-controller",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          },
+          {
+            "name": "postgres",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "bootstrap-controller",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "postgres",
+            "waiting_reason": null,
+            "terminated_reason": null
+          }
+        ]
+      },
+      {
+        "name": "report-db-1-initdb-bfwlv",
+        "phase": "Succeeded",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "False",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": "PodCompleted",
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "False",
+            "reason": "PodCompleted",
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "False",
+            "reason": "PodCompleted",
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker2",
+        "containers": [
+          {
+            "name": "bootstrap-controller",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          },
+          {
+            "name": "initdb",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "bootstrap-controller",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "initdb",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          }
+        ]
+      },
+      {
+        "name": "report-db-1-initdb-hkmpq",
+        "phase": "Failed",
+        "conditions": [
+          {
+            "type": "PodReadyToStartContainers",
+            "status": "False",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Initialized",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          },
+          {
+            "type": "Ready",
+            "status": "False",
+            "reason": "PodFailed",
+            "categories": []
+          },
+          {
+            "type": "ContainersReady",
+            "status": "False",
+            "reason": "PodFailed",
+            "categories": []
+          },
+          {
+            "type": "PodScheduled",
+            "status": "True",
+            "reason": null,
+            "categories": []
+          }
+        ],
+        "node": "portfolio-workload-gitops-worker2",
+        "containers": [
+          {
+            "name": "bootstrap-controller",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          },
+          {
+            "name": "initdb",
+            "resources": {
+              "limits": {
+                "cpu": "1",
+                "memory": "1Gi"
+              },
+              "requests": {
+                "cpu": "250m",
+                "memory": "512Mi"
+              }
+            }
+          }
+        ],
+        "container_states": [
+          {
+            "name": "bootstrap-controller",
+            "waiting_reason": null,
+            "terminated_reason": "Completed"
+          },
+          {
+            "name": "initdb",
+            "waiting_reason": null,
+            "terminated_reason": "Error"
+          }
+        ]
+      }
+    ],
+    "persistentvolumeclaims": [
+      {
+        "name": "report-db-1",
+        "phase": "Bound",
+        "conditions": []
+      }
+    ],
+    "jobs": [
+      {
+        "name": "report-db-1-initdb",
+        "phase": null,
+        "conditions": [
+          {
+            "type": "SuccessCriteriaMet",
+            "status": "True",
+            "reason": "CompletionsReached",
+            "categories": []
+          },
+          {
+            "type": "Complete",
+            "status": "True",
+            "reason": "CompletionsReached",
+            "categories": []
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "reason": "Scheduled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Scheduled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulling",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulling",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "SuccessfulCreate",
+        "object_kind": "Job",
+        "categories": []
+      },
+      {
+        "reason": "SuccessfulCreate",
+        "object_kind": "Job",
+        "categories": []
+      },
+      {
+        "reason": "Completed",
+        "object_kind": "Job",
+        "categories": []
+      },
+      {
+        "reason": "WaitForFirstConsumer",
+        "object_kind": "PersistentVolumeClaim",
+        "categories": []
+      },
+      {
+        "reason": "ExternalProvisioning",
+        "object_kind": "PersistentVolumeClaim",
+        "categories": []
+      },
+      {
+        "reason": "Provisioning",
+        "object_kind": "PersistentVolumeClaim",
+        "categories": []
+      },
+      {
+        "reason": "ProvisioningSucceeded",
+        "object_kind": "PersistentVolumeClaim",
+        "categories": []
+      },
+      {
+        "reason": "Scheduled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Pulled",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Created",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "Started",
+        "object_kind": "Pod",
+        "categories": []
+      },
+      {
+        "reason": "NoPods",
+        "object_kind": "PodDisruptionBudget",
+        "categories": []
+      },
+      {
+        "reason": "CreatingPodDisruptionBudget",
+        "object_kind": "Cluster",
+        "categories": []
+      },
+      {
+        "reason": "CreatingPodDisruptionBudget",
+        "object_kind": "Cluster",
+        "categories": []
+      },
+      {
+        "reason": "NoPods",
+        "object_kind": "PodDisruptionBudget",
+        "categories": []
+      },
+      {
+        "reason": "CreatingServiceAccount",
+        "object_kind": "Cluster",
+        "categories": []
+      },
+      {
+        "reason": "CreatingRole",
+        "object_kind": "Cluster",
+        "categories": []
+      },
+      {
+        "reason": "CreatingInstance",
+        "object_kind": "Cluster",
+        "categories": []
+      }
+    ],
+    "database": {
+      "instances": 1,
+      "ready_instances": 1,
+      "phase": "Instance Status Extraction Error: HTTP communication issue",
+      "conditions": [
+        {
+          "type": "Initialized",
+          "status": "True",
+          "reason": "BootstrapCompleted",
+          "categories": []
+        },
+        {
+          "type": "ConsistentSystemID",
+          "status": "False",
+          "reason": "NotFound",
+          "categories": []
+        },
+        {
+          "type": "Ready",
+          "status": "False",
+          "reason": "ClusterIsNotReady",
+          "categories": []
+        },
+        {
+          "type": "ContinuousArchiving",
+          "status": "True",
+          "reason": "ContinuousArchivingSuccess",
+          "categories": []
+        }
+      ]
+    }
+  },
+  "finished_at": "2026-10-06T08:59:16.021131+00:00"
+}

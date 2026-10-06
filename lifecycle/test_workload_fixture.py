@@ -37,6 +37,12 @@ class WorkloadFixtureTests(unittest.TestCase):
         denied = json.loads((FIXTURE / "denied/resources.json").read_text())["items"]
         self.assertEqual(denied, [{"apiVersion": "v1", "kind": "Namespace",
                                    "metadata": {"name": "report-forbidden"}}])
+        overlay = json.loads((FIXTURE / "local-network/resources.json").read_text())["items"]
+        for policy in overlay:
+            self.assertEqual(policy["kind"], "NetworkPolicy")
+            self.assertEqual(policy["metadata"]["namespace"], "report-gitops")
+            self.assertNotIn("0.0.0.0/0", json.dumps(policy))
+        self.assertEqual(len(overlay), 3)
 
 
 if __name__ == "__main__":
