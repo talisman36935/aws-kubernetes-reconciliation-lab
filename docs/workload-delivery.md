@@ -22,8 +22,10 @@ Platform owns database, workload identity, quota and default-deny policy. App ri
 exclude Secrets, ServiceAccounts, RBAC and cluster resources. Existing Flux roots
 remain contract-only. Provider/CNI/API/peer/metadata/telemetry policies and workload
 IAM require explicit qualification; the rendered candidate is intentionally blocked,
-not an operational EKS profile. Live app GitOps/rollback/negative-RBAC evidence is
-still pending, distinct from the passing local contract drift/cleanup test.
+not an operational EKS profile. The [separate hosted application experiment](application-gitops.md)
+now qualifies local delivery/configuration rollback/negative-RBAC and one policy
+path with explicit local networking and Deployment health extensions. This does
+not qualify the generic blocked cloud tree or activate current Flux roots.
 
 Queue delivery is at least once. DB publication/processing tokens fence state;
 workers create attempt/hash-specific S3 objects, atomically select a reference and

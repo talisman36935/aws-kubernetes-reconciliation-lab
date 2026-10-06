@@ -1,5 +1,15 @@
 # Verification record
 
+## Hosted application GitOps — 2026-10-06
+
+[37444041498](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37444041498)
+passed actual application baseline/promotion/configuration rollback/drift repair,
+source/replica/image/golden report assertions, migration ordering, direct RBAC and
+controller denial, local policy probes, independent observation validation and
+cluster cleanup. See the [twelve-job record and full audit](observations/d418d3f/qualification.md).
+Three simulated-zone workers share one host. No cloud resources were provisioned;
+binary/schema rollback, Config Sync and EKS/cloud lifecycle remain unqualified.
+
 ## Initial foundation — 2026-10-03
 
 Source: `02711fca85f1a1f82b493d580a83c1d1d944e129`.

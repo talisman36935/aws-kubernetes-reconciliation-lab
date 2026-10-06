@@ -1,5 +1,11 @@
 # Hosted application GitOps experiment
 
+[Run 37444041498](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37444041498)
+passed all runtime and independent observation gates. The
+[qualified record and failure audit](observations/d418d3f/qualification.md) retain
+exact source revisions, twelve phase-local jobs, permission/network results and
+cleanup. Historical failures and the earlier aliased observation are not rewritten.
+
 This opt-in experiment uses the qualified Report Workshop image with three API,
 three worker and three CloudNativePG database instances in a disposable four-node
 kind cluster on one GitHub runner. Flux fetches real public immutable Git commits
@@ -65,8 +71,8 @@ did not enforce policies was incorrect and contributed to the first failed runs.
 The local overlay and allow/deny probes must pass before claiming local policy
 behavior. This is not an activated EKS profile. Physical-zone HA, CSI deletion, live IAM/SQS/S3,
 Config Sync runtime, Cloud Deploy, binary/schema rollback, cloud budgets/TTL and
-portfolio ingestion remain separate gates. Runtime results must be recorded before
-claiming this experiment passed.
+portfolio ingestion remain separate gates. A render or ordinary CI pass does not
+replace this separately qualified runtime experiment.
 
 Impersonation and source pinning follow the operational contracts in the official
 [Flux Kustomization documentation](https://fluxcd.io/flux/components/kustomize/kustomizations/)

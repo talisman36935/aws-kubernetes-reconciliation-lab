@@ -6,10 +6,13 @@ A Kubernetes reconciliation lab: Git-driven controller reconciliation, observabl
 failure/recovery, and eventual **audited deletion** of a temporary AWS environment.
 Companion: [GCP Platform Delivery Lab](https://github.com/talisman36935/gcp-platform-delivery-lab).
 
-**Status: local reconciliation foundation, not an EKS implementation.**
+**Status: hosted application/GitOps qualification, not an EKS implementation.**
 The EKS rendering spike now checks a bounded desired-state set against pinned
 CAPI/CAPA CRD schemas; controller and cloud qualification are still pending.
-This first slice proves kind/Flux desired-state reconciliation and drift repair.
+Hosted kind/Flux now proves application delivery, configuration promotion/rollback,
+drift repair, direct permission/controller denial and one network allow/deny path.
+The [qualified twelve-job record](docs/observations/d418d3f/qualification.md) preserves
+exact inputs, failed attempts and limits. This remains one-machine/local-path evidence.
 CAPI/CAPA, ACK S3/SQS, AWS identity, independent teardown audit and TTL janitor
 remain explicit next milestones. No AWS resources are provisioned by current code.
 
@@ -67,6 +70,8 @@ The pinned source additionally includes the dormant three-instance database prof
 see [application replica and database contracts](https://github.com/talisman36935/gcp-platform-delivery-lab/blob/0e0a6133a18e4cfb10aae4defabd5b8f52ec69b5/docs/application-replicas.md).
 AWS CI checks both application and database renders against pinned schemas. These
 renders are not connected to the current Flux source and do not deploy workloads.
+The separate opt-in hosted experiment uses a derived local fixture with explicit
+network and rollout-health extensions; it does not activate the cloud source root.
 The AWS Validate workflow tests that exact shared evidence contract, including
 rejection of incomplete success records and private error text.
 
