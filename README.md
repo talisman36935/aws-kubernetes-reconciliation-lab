@@ -95,6 +95,7 @@ AWS identity verification, an operational janitor, spending approval or a hard c
 - [Safety, lifecycle and next cloud gates](docs/runbook.md)
 - [EKS rendering and provider compatibility spike](docs/eks-compatibility.md)
 - [Shared cloud adapters and opt-in Flux workload delivery](docs/workload-delivery.md)
+- [Hosted application GitOps promotion, rollback and permission experiment](docs/application-gitops.md)
 - [Third-party notices](THIRD_PARTY_NOTICES.md)
 
 The architecture profile describes target capabilities, not completed cloud work.

@@ -1,0 +1,82 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "kustomize.toolkit.fluxcd.io/v1",
+      "kind": "Kustomization",
+      "metadata": {
+        "name": "report-platform",
+        "namespace": "flux-system"
+      },
+      "spec": {
+        "interval": "1m",
+        "timeout": "5m",
+        "prune": true,
+        "wait": true,
+        "sourceRef": {
+          "kind": "GitRepository",
+          "name": "portfolio"
+        },
+        "path": "./management/workload-test/platform",
+        "healthCheckExprs": [
+          {
+            "apiVersion": "postgresql.cnpg.io/v1",
+            "kind": "Cluster",
+            "current": "has(status.readyInstances) && status.readyInstances == spec.instances"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "kustomize.toolkit.fluxcd.io/v1",
+      "kind": "Kustomization",
+      "metadata": {
+        "name": "report-migrations",
+        "namespace": "flux-system"
+      },
+      "spec": {
+        "interval": "1m",
+        "timeout": "5m",
+        "prune": true,
+        "wait": true,
+        "sourceRef": {
+          "kind": "GitRepository",
+          "name": "portfolio"
+        },
+        "path": "./management/workload-test/migrations",
+        "dependsOn": [
+          {
+            "name": "report-platform"
+          }
+        ],
+        "serviceAccountName": "report-reconciler"
+      }
+    },
+    {
+      "apiVersion": "kustomize.toolkit.fluxcd.io/v1",
+      "kind": "Kustomization",
+      "metadata": {
+        "name": "report-apps",
+        "namespace": "flux-system"
+      },
+      "spec": {
+        "interval": "1m",
+        "timeout": "5m",
+        "prune": true,
+        "wait": true,
+        "sourceRef": {
+          "kind": "GitRepository",
+          "name": "portfolio"
+        },
+        "path": "./management/workload-test/apps",
+        "dependsOn": [
+          {
+            "name": "report-migrations"
+          }
+        ],
+        "serviceAccountName": "report-reconciler"
+      }
+    }
+  ]
+}

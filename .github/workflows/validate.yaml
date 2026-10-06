@@ -45,6 +45,7 @@ jobs:
           python3 -m unittest discover -s shared-source/workload/deploy -v
           python3 shared-source/workload/deploy/check_schemas.py
           python3 shared-source/workload/deploy/check_database_schema.py
+          python3 scripts/check-workload-fixture.py --shared-source shared-source
   local-reconciliation:
     # Public upstream commits only; fork PRs get static checks and no external
     # source mismatch. No cloud identity, Git write token, or cloud resources.

@@ -1,0 +1,58 @@
+name: Qualify application GitOps
+on:
+  workflow_dispatch:
+    inputs:
+      baseline_revision:
+        description: Reviewed baseline Git commit with successful Validate
+        required: true
+        type: string
+      candidate_revision:
+        description: Reviewed current main candidate with successful Validate
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: qualify-workload-gitops
+  cancel-in-progress: false
+jobs:
+  application-gitops:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Require validated immutable revisions
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASELINE: ${{ inputs.baseline_revision }}
+          CANDIDATE: ${{ inputs.candidate_revision }}
+        run: |
+          [[ "$BASELINE" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$CANDIDATE" =~ ^[0-9a-f]{40}$ ]]
+          test "$BASELINE" != "$CANDIDATE"
+          test "$(gh api repos/${{ github.repository }}/commits/main --jq .sha)" = "$CANDIDATE"
+          for revision in "$BASELINE" "$CANDIDATE"; do
+            gh api "repos/${{ github.repository }}/actions/workflows/validate.yaml/runs?head_sha=$revision&branch=main&event=push" --jq '.workflow_runs | any(.conclusion == "success")' | grep -Fx true
+          done
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ inputs.candidate_revision }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install checksum-verified tools
+        run: |
+          bash scripts/install-local-tools.sh "$RUNNER_TEMP/lab-tools"
+          echo "$RUNNER_TEMP/lab-tools" >> "$GITHUB_PATH"
+      - name: Reconcile, promote, roll back, repair drift and deny escalation
+        env:
+          BASELINE: ${{ inputs.baseline_revision }}
+          CANDIDATE: ${{ inputs.candidate_revision }}
+        run: python3 scripts/qualify-workload-gitops.py --baseline "$BASELINE" --candidate "$CANDIDATE"
+      - name: Retain allowlisted observation
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: workload-gitops
+          path: output/workload-gitops.json
+          retention-days: 30

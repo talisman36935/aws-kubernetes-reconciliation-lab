@@ -1,0 +1,281 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Namespace",
+      "metadata": {
+        "name": "report-gitops",
+        "labels": {
+          "pod-security.kubernetes.io/enforce": "restricted"
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ResourceQuota",
+      "metadata": {
+        "name": "lab-budget",
+        "namespace": "report-gitops"
+      },
+      "spec": {
+        "hard": {
+          "requests.cpu": "3",
+          "requests.memory": "4Gi",
+          "limits.cpu": "12",
+          "limits.memory": "8Gi",
+          "pods": "16",
+          "persistentvolumeclaims": "3",
+          "requests.storage": "30Gi"
+        }
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "default-deny",
+        "namespace": "report-gitops"
+      },
+      "spec": {
+        "podSelector": {},
+        "policyTypes": [
+          "Ingress",
+          "Egress"
+        ]
+      }
+    },
+    {
+      "apiVersion": "networking.k8s.io/v1",
+      "kind": "NetworkPolicy",
+      "metadata": {
+        "name": "workload-database",
+        "namespace": "report-gitops"
+      },
+      "spec": {
+        "podSelector": {
+          "matchLabels": {
+            "app.kubernetes.io/name": "report-workshop"
+          }
+        },
+        "policyTypes": [
+          "Egress"
+        ],
+        "egress": [
+          {
+            "to": [
+              {
+                "podSelector": {
+                  "matchLabels": {
+                    "cnpg.io/cluster": "report-db"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "TCP",
+                "port": 5432
+              }
+            ]
+          },
+          {
+            "to": [
+              {
+                "namespaceSelector": {
+                  "matchLabels": {
+                    "kubernetes.io/metadata.name": "kube-system"
+                  }
+                }
+              }
+            ],
+            "ports": [
+              {
+                "protocol": "UDP",
+                "port": 53
+              },
+              {
+                "protocol": "TCP",
+                "port": 53
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ServiceAccount",
+      "metadata": {
+        "name": "report-workshop",
+        "namespace": "report-gitops",
+        "labels": {
+          "app.kubernetes.io/name": "report-workshop"
+        },
+        "annotations": {
+          "portfolio.whitt.uk/source-revision": "0e0a6133a18e4cfb10aae4defabd5b8f52ec69b5"
+        }
+      },
+      "automountServiceAccountToken": false
+    },
+    {
+      "apiVersion": "postgresql.cnpg.io/v1",
+      "kind": "Cluster",
+      "metadata": {
+        "name": "report-db",
+        "namespace": "report-gitops"
+      },
+      "spec": {
+        "instances": 3,
+        "imageName": "ghcr.io/cloudnative-pg/postgresql:18.4@sha256:6138f19539304b585c6cafd1af82ca407f184139459a8e06f0880df4556d3588",
+        "enableSuperuserAccess": false,
+        "bootstrap": {
+          "initdb": {
+            "database": "workshop",
+            "owner": "workshop"
+          }
+        },
+        "storage": {
+          "size": "10Gi",
+          "storageClass": "standard"
+        },
+        "resources": {
+          "requests": {
+            "cpu": "250m",
+            "memory": "512Mi"
+          },
+          "limits": {
+            "cpu": "1",
+            "memory": "1Gi"
+          }
+        },
+        "affinity": {
+          "enablePodAntiAffinity": true,
+          "podAntiAffinityType": "required",
+          "topologyKey": "topology.kubernetes.io/zone"
+        },
+        "postgresql": {
+          "parameters": {
+            "shared_buffers": "128MB",
+            "max_connections": "100"
+          },
+          "synchronous": {
+            "method": "any",
+            "number": 1,
+            "dataDurability": "required",
+            "failoverQuorum": true
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "Role",
+      "metadata": {
+        "name": "report-workload-writer",
+        "namespace": "report-gitops"
+      },
+      "rules": [
+        {
+          "apiGroups": [
+            ""
+          ],
+          "resources": [
+            "configmaps",
+            "services"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch",
+            "create",
+            "update",
+            "patch",
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            "apps"
+          ],
+          "resources": [
+            "deployments"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch",
+            "create",
+            "update",
+            "patch",
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            "batch"
+          ],
+          "resources": [
+            "jobs"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch",
+            "create",
+            "update",
+            "patch",
+            "delete"
+          ]
+        },
+        {
+          "apiGroups": [
+            "policy"
+          ],
+          "resources": [
+            "poddisruptionbudgets"
+          ],
+          "verbs": [
+            "get",
+            "list",
+            "watch",
+            "create",
+            "update",
+            "patch",
+            "delete"
+          ]
+        }
+      ]
+    },
+    {
+      "apiVersion": "rbac.authorization.k8s.io/v1",
+      "kind": "RoleBinding",
+      "metadata": {
+        "name": "report-workload-writer",
+        "namespace": "report-gitops"
+      },
+      "roleRef": {
+        "apiGroup": "rbac.authorization.k8s.io",
+        "kind": "Role",
+        "name": "report-workload-writer"
+      },
+      "subjects": [
+        {
+          "kind": "ServiceAccount",
+          "name": "report-reconciler",
+          "namespace": "flux-system"
+        }
+      ]
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ServiceAccount",
+      "metadata": {
+        "name": "report-reconciler",
+        "namespace": "flux-system"
+      },
+      "automountServiceAccountToken": false
+    }
+  ]
+}
