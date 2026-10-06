@@ -1,0 +1,81 @@
+{
+  "verification": "hosted-kind-flux",
+  "result": "passed",
+  "started_at": "2026-10-06T16:29:43.832264+00:00",
+  "baseline_revision": "bba5671e7d0c741445da0b272563729d754affc0",
+  "candidate_revision": "372f4325c8c308554443942649721eb68e70eddd",
+  "application_source": "32c98ffd9cacb528c2d017f7ea39b54536ca2211",
+  "image": "ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5",
+  "cloud_provisioned": false,
+  "network_policy_enforced": true,
+  "simulation": "three labelled workers on one host; local NetworkPolicy allow/deny probes",
+  "configuration_rollback_only": true,
+  "phases": [
+    {
+      "phase": "baseline",
+      "revision": "bba5671e7d0c741445da0b272563729d754affc0",
+      "jobs": [
+        "499fded2ef8e30eedf603ad8dc4a7ae6",
+        "80791c877108a67ba8c352b7d1b38dfc",
+        "7a4838b910614e0be49f4aa8f32e5a22"
+      ]
+    },
+    {
+      "phase": "candidate",
+      "revision": "372f4325c8c308554443942649721eb68e70eddd",
+      "jobs": [
+        "ce3c15e706646a783aa29277e2560111",
+        "e4bbbe2c8acffaa71e7f844f65bbf233",
+        "5905843425947ce0f5dbfd0c749ae216"
+      ]
+    },
+    {
+      "phase": "rollback",
+      "revision": "bba5671e7d0c741445da0b272563729d754affc0",
+      "jobs": [
+        "d463a2c0e55b18aef5d65cf18c7c90db",
+        "2e0836e053bd533b77e15a49a20bdc35",
+        "e0cdacbee8854419d2ff914da3153114"
+      ]
+    },
+    {
+      "phase": "drift-repaired",
+      "revision": "bba5671e7d0c741445da0b272563729d754affc0",
+      "jobs": [
+        "f99413b5464fd1e433a4fa588d2f0d93",
+        "3285d53e7b864427efa2068b2ee8ff99",
+        "6f9e084fc0424882894a2998d4ba19e0"
+      ]
+    }
+  ],
+  "permissions": {
+    "configmaps": true,
+    "deployments.apps": true,
+    "secrets": false,
+    "serviceaccounts": false,
+    "roles.rbac.authorization.k8s.io": false,
+    "namespaces": false,
+    "clusterroles": false
+  },
+  "controller_denial": {
+    "ready": false,
+    "reason": "ReconciliationFailed",
+    "forbidden_observed": true
+  },
+  "migration_before_apps": true,
+  "cluster_deleted": true,
+  "errors": [],
+  "network_probes": {
+    "allowed": {
+      "exit_code": 0,
+      "expected": 0,
+      "target": "report-db-rw:5432"
+    },
+    "denied": {
+      "exit_code": 2,
+      "expected": 2,
+      "target": "report-db-rw:5432"
+    }
+  },
+  "finished_at": "2026-10-06T16:35:17.292832+00:00"
+}

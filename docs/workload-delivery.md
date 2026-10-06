@@ -8,10 +8,12 @@ The current pin is GCP source `32c98ffd9cacb528c2d017f7ea39b54536ca2211` and
 image index `ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5`.
 That exact source passed GCP Validate (`37493189725`) and hosted native ARM /
 Kubernetes HA qualification (`37493759179`). Anonymous pulls verified the public
-AMD64 and ARM64 image contents. AWS fixture parity and hosted application GitOps
-qualification against this new pin are in progress; the prior pin passed hosted
-promotion/rollback (`37482370289`). None of these runs is live AWS or EKS/CAPA/ACK
-qualification.
+AMD64 and ARM64 image contents. AWS fixture parity passed Validate runs
+`37495547945` and `37495581270`; hosted application GitOps passed run
+`37496120127`. Its allowlisted record is archived at
+[`observations/372f432/workload-gitops.json`](observations/372f432/workload-gitops.json).
+The prior pin's qualification (`37482370289`) remains historical. None of these
+runs is live AWS or EKS/CAPA/ACK qualification.
 
 ```sh
 python3 scripts/render-workload-delivery.py \

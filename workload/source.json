@@ -3,5 +3,5 @@
   "revision": "32c98ffd9cacb528c2d017f7ea39b54536ca2211",
   "directory": "workload",
   "image_digest": "ghcr.io/talisman36935/report-workshop@sha256:47c7464df5cb1d20ba05eeb391d211309919c477503316d7c8fcf6d4feb43fe5",
-  "status": "Exact GCP source passed Validate 37493189725 and hosted HA/ARM qualification 37493759179; public AMD64/ARM64 image content verified anonymously; AWS fixture refresh and hosted GitOps requalification pending; live-cloud provisioning, IAM/SQS/S3, EKS/CAPA/ACK, budget and independent cleanup remain pending"
+  "status": "Exact GCP source passed Validate 37493189725 and hosted HA/ARM qualification 37493759179; public AMD64/ARM64 image content verified anonymously; AWS fixture and hosted application GitOps passed Validate 37495547945/37495581270 and qualification 37496120127; live-cloud provisioning, IAM/SQS/S3, EKS/CAPA/ACK, budget and independent cleanup remain pending"
 }
