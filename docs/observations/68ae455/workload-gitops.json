@@ -1,0 +1,25 @@
+{
+  "verification": "hosted-kind-flux",
+  "result": "failed",
+  "started_at": "2026-10-06T08:42:17.172073+00:00",
+  "baseline_revision": "ddb35e0c424c9f6b2002fb31afd7a62afd4754dc",
+  "candidate_revision": "68ae455d4de9ef46e82ffa1329858063771f5caf",
+  "application_source": "0e0a6133a18e4cfb10aae4defabd5b8f52ec69b5",
+  "image": "ghcr.io/talisman36935/report-workshop@sha256:505f63c5428ef76ccbd39389b623962f8abc3bc72e73bc73b1b5cfcf70bcc23a",
+  "cloud_provisioned": false,
+  "network_policy_enforced": false,
+  "simulation": "three labelled workers on one host; kindnet has no policy enforcement",
+  "configuration_rollback_only": true,
+  "phases": [],
+  "permissions": {},
+  "controller_denial": null,
+  "migration_before_apps": false,
+  "cluster_deleted": true,
+  "errors": [
+    {
+      "stage": "baseline-reconciliation",
+      "category": "CalledProcessError"
+    }
+  ],
+  "finished_at": "2026-10-06T08:49:27.935286+00:00"
+}

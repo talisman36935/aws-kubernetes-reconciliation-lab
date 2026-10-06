@@ -159,6 +159,64 @@ def permissions():
     return result
 
 
+def categories(message):
+    """Classify structural failures without exporting the original message."""
+    text = message.lower()
+    patterns = {"quota-missing-compute": "must specify",
+                "quota-exceeded": "exceeded quota", "pod-security": "violates podsecurity",
+                "unbound-storage": "unbound immediate persistentvolumeclaims",
+                "insufficient-cpu": "insufficient cpu", "insufficient-memory": "insufficient memory",
+                "forbidden": "forbidden", "image-pull": "pull image",
+                "cel-evaluation": "evaluate", "health-timeout": "health check failed"}
+    return sorted(name for name, pattern in patterns.items() if pattern in text)
+
+
+def diagnostics():
+    """Only structural status fields, never logs, env, Secrets or raw messages."""
+    result = {}
+    for kind in ("pods", "persistentvolumeclaims", "jobs", "events"):
+        try:
+            objects = json.loads(kube("-n", NAMESPACE, "get", kind, "-o", "json"))["items"]
+            rows = []
+            for obj in objects[:50]:
+                status = obj.get("status", {})
+                row = {"name": obj["metadata"]["name"]}
+                if kind == "events":
+                    row = {"reason": obj.get("reason"),
+                           "object_kind": obj.get("involvedObject", {}).get("kind"),
+                           "categories": categories(obj.get("message", ""))}
+                else:
+                    row["phase"] = status.get("phase")
+                    row["conditions"] = [{"type": c["type"], "status": c["status"],
+                                          "reason": c.get("reason"),
+                                          "categories": categories(c.get("message", ""))}
+                                         for c in status.get("conditions", [])]
+                if kind == "pods":
+                    row["node"] = obj["spec"].get("nodeName")
+                    row["containers"] = [{"name": c["name"], "resources": c.get("resources", {})}
+                                         for c in obj["spec"].get("initContainers", [])
+                                         + obj["spec"].get("containers", [])]
+                    row["container_states"] = [{"name": c["name"],
+                        "waiting_reason": c.get("state", {}).get("waiting", {}).get("reason"),
+                        "terminated_reason": c.get("state", {}).get("terminated", {}).get("reason")}
+                        for c in status.get("initContainerStatuses", []) + status.get("containerStatuses", [])]
+                rows.append(row)
+            result[kind] = rows
+        except Exception:
+            result[kind] = {"unavailable": True}
+    try:
+        status = get("clusters.postgresql.cnpg.io", "report-db").get("status", {})
+        result["database"] = {"instances": status.get("instances"),
+                              "ready_instances": status.get("readyInstances"),
+                              "phase": status.get("phase"),
+                              "conditions": [{"type": c["type"], "status": c["status"],
+                                  "reason": c.get("reason"), "categories": categories(c.get("message", ""))}
+                                  for c in status.get("conditions", [])]}
+    except Exception:
+        result["database"] = {"unavailable": True}
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--baseline", required=True)
@@ -221,6 +279,10 @@ def main():
                 "--url=https://github.com/talisman36935/aws-kubernetes-reconciliation-lab",
                 "--commit=" + args.baseline, "--interval=1m", "--timeout=3m", timeout=200)
             kube("apply", "-f", str(ROOT / "management/workload-test/root/resources.json"))
+            # Observe platform-created DB early so failures retain structural
+            # admission/storage diagnostics instead of only a Flux wait timeout.
+            wait(lambda: get("clusters.postgresql.cnpg.io", "report-db").get(
+                "status", {}).get("readyInstances") == 3, 240)
             reconcile(args.baseline)
             job = get("job", "report-migrate-" + lock["revision"][:12])
             completion = datetime.fromisoformat(job["status"]["completionTime"].replace("Z", "+00:00"))
@@ -275,6 +337,8 @@ def main():
                                       for c in obj.get("status", {}).get("conditions", [])])
                     except Exception:
                         pass
+                record["diagnostics"] = diagnostics()
+                print(json.dumps(record["diagnostics"], sort_keys=True), flush=True)
         finally:
             if created:
                 try:
