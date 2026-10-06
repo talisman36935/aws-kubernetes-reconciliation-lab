@@ -1,4 +1,4 @@
-"""Hosted-only application Flux reconciliation and configuration rollback test."""
+"""Hosted-only application Flux reconciliation and immutable-release rollback test."""
 
 import argparse
 from datetime import datetime, timezone
@@ -33,9 +33,10 @@ def stamp():
     return datetime.now(timezone.utc).isoformat()
 
 
-def phase_record(phase, revision, jobs):
+def phase_record(phase, revision, jobs, application_source, image):
     """Snapshot the phase rather than aliasing the growing preserved-job list."""
-    return {"phase": phase, "revision": revision, "jobs": list(jobs)}
+    return {"phase": phase, "revision": revision, "application_source": application_source,
+            "image": image, "jobs": list(jobs)}
 
 
 def run(*args, data=None, timeout=90):
@@ -272,14 +273,33 @@ def main():
     if run("git", "rev-parse", "HEAD") != args.candidate:
         parser.error("candidate must match the executing checkout")
     run("git", "merge-base", "--is-ancestor", args.baseline, args.candidate)
-    if json.loads(run("git", "show", args.baseline + ":workload/source.json")) != json.loads(
-            (ROOT / "workload/source.json").read_text()):
-        parser.error("configuration rollback requires identical application source/image locks")
-    for group in ("platform", "migrations", "root", "denied"):
+    baseline_lock = json.loads(run("git", "show", args.baseline + ":workload/source.json"))
+    candidate_lock = json.loads((ROOT / "workload/source.json").read_text())
+    for field in ("repository", "directory"):
+        if baseline_lock[field] != candidate_lock[field]:
+            parser.error("baseline and candidate must use the same shared workload repository/layout")
+    release_changed = any(baseline_lock[field] != candidate_lock[field]
+                          for field in ("revision", "image_digest"))
+    if not release_changed and baseline_lock != candidate_lock:
+        parser.error("source lock status changed without an application release change")
+    if release_changed:
+        allowed = {"workload/source.json", "management/workload-test/platform/resources.json",
+                   "management/workload-test/migrations/resources.json",
+                   "management/workload-test/apps/resources.json", "scripts/check-workload-fixture.py",
+                   "scripts/qualify-workload-gitops.py", "scripts/validate-workload-observation.py",
+                   "lifecycle/test_workload_fixture.py", "lifecycle/test_workload_observation.py",
+                   "lifecycle/test_gitops_diagnostics.py",
+                   "docs/workload-delivery.md", "docs/application-gitops.md",
+                   "docs/observations/9fa2e75/qualification.md"}
+        changed = set(run("git", "diff", "--name-only", args.baseline, args.candidate).splitlines())
+        if not changed or not changed <= allowed:
+            parser.error("release promotion changes exceed the reviewed source lock/derived-fixture scope")
+    for group in (("root", "denied") if release_changed else
+                  ("platform", "migrations", "root", "denied")):
         for filename in ("resources.json", "kustomization.yaml"):
             path = "management/workload-test/" + group + "/" + filename
             if run("git", "show", args.baseline + ":" + path) != (ROOT / path).read_text().strip():
-                parser.error("only application configuration may differ between revisions")
+                parser.error("platform/root/delegation contract must be unchanged between revisions")
     path = "management/workload-test/local-network/resources.json"
     if run("git", "show", args.baseline + ":" + path) != (ROOT / path).read_text().strip():
         parser.error("local network overlay must be unchanged between revisions")
@@ -288,14 +308,18 @@ def main():
     output = ROOT / "output/workload-gitops.json"
     if output.exists():
         parser.error("refusing to overwrite observations")
-    lock = json.loads((ROOT / "workload/source.json").read_text())
+    lock = candidate_lock
     record = {"verification": "hosted-kind-flux", "result": "failed",
               "started_at": stamp(), "baseline_revision": args.baseline,
               "candidate_revision": args.candidate, "application_source": lock["revision"],
+              "baseline_application_source": baseline_lock["revision"],
               "image": lock["image_digest"], "cloud_provisioned": False,
+              "baseline_image": baseline_lock["image_digest"],
               "network_policy_enforced": False,
               "simulation": "three labelled workers on one host; local NetworkPolicy allow/deny probes",
-              "configuration_rollback_only": True, "phases": [], "permissions": {},
+              "configuration_rollback_only": not release_changed,
+              "application_source_rollback": release_changed,
+              "phases": [], "permissions": {},
               "controller_denial": None, "migration_before_apps": False,
               "cluster_deleted": False, "errors": []}
     created = False
@@ -335,24 +359,27 @@ def main():
             wait(lambda: get("clusters.postgresql.cnpg.io", "report-db").get(
                 "status", {}).get("readyInstances") == 3, 240)
             reconcile(args.baseline)
-            job = get("job", "report-migrate-" + lock["revision"][:12])
+            job = get("job", "report-migrate-" + baseline_lock["revision"][:12])
             completion = datetime.fromisoformat(job["status"]["completionTime"].replace("Z", "+00:00"))
             for role in ("api", "worker"):
                 created_at = get("deployment", "report-" + role)["metadata"]["creationTimestamp"]
                 if datetime.fromisoformat(created_at.replace("Z", "+00:00")) < completion:
                     raise ValueError("application deployed before migration completion")
             record["migration_before_apps"] = True
-            jobs = smoke("baseline", lock["image_digest"], [])
-            record["phases"].append(phase_record("baseline", args.baseline, jobs))
+            jobs = smoke("baseline", baseline_lock["image_digest"], [])
+            record["phases"].append(phase_record("baseline", args.baseline, jobs,
+                                                  baseline_lock["revision"], baseline_lock["image_digest"]))
             stage = "candidate-reconciliation"
             reconcile(args.candidate)
             new = smoke("candidate", lock["image_digest"], jobs)
-            record["phases"].append(phase_record("candidate", args.candidate, new))
+            record["phases"].append(phase_record("candidate", args.candidate, new,
+                                                  lock["revision"], lock["image_digest"]))
             jobs += new
             stage = "rollback-reconciliation"
             reconcile(args.baseline)
-            new = smoke("baseline", lock["image_digest"], jobs)
-            record["phases"].append(phase_record("rollback", args.baseline, new))
+            new = smoke("baseline", baseline_lock["image_digest"], jobs)
+            record["phases"].append(phase_record("rollback", args.baseline, new,
+                                                  baseline_lock["revision"], baseline_lock["image_digest"]))
             jobs += new
             stage = "drift-repair"
             kube("-n", NAMESPACE, "patch", "configmap", "delivery-release", "--type=merge",
@@ -361,8 +388,9 @@ def main():
                  json.dumps({"spec": {"template": {"metadata": {"annotations": {
                      "portfolio.whitt.uk/config-release": "out-of-band"}}}}}))
             reconcile(args.baseline)
-            new = smoke("baseline", lock["image_digest"], jobs)
-            record["phases"].append(phase_record("drift-repaired", args.baseline, new))
+            new = smoke("baseline", baseline_lock["image_digest"], jobs)
+            record["phases"].append(phase_record("drift-repaired", args.baseline, new,
+                                                  baseline_lock["revision"], baseline_lock["image_digest"]))
             stage = "delegated-denial"
             record["permissions"] = permissions()
             kube("apply", "-f", "-", data=json.dumps({

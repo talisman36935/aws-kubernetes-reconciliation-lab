@@ -1,4 +1,4 @@
-# Hosted application GitOps experiment
+# Hosted application release and GitOps experiment
 
 Latest run: [37496120127](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37496120127)
 passed against GCP source `32c98ffd9cacb528c2d017f7ea39b54536ca2211` and image
@@ -7,6 +7,9 @@ The baseline and app-only candidate passed AWS Validate runs
 `37495547945` / `37495581270`. The allowlisted 12-job result is archived at
 [`observations/372f432/workload-gitops.json`](observations/372f432/workload-gitops.json).
 This run proves local hosted-kind/Flux behavior only; it provisions no cloud resources.
+The next candidate advances both immutable application source and image; the
+release-upgrade harness will verify candidate promotion, rollback to the prior
+source/image, retained reports and drift repair. That qualification is pending.
 
 The prior qualified pin's run [37482370289](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37482370289)
 and sanitized result remain archived at [the 18c7015 observation](observations/18c7015/qualification.md).

@@ -13,7 +13,8 @@ SPEC.loader.exec_module(MODULE)
 class DiagnosticsTests(unittest.TestCase):
     def test_phase_records_are_independent_snapshots(self):
         jobs = ["a" * 32]
-        phase = MODULE.phase_record("baseline", "b" * 40, jobs)
+        phase = MODULE.phase_record("baseline", "b" * 40, jobs, "d" * 40,
+                                    "ghcr.io/talisman36935/report-workshop@sha256:" + "e" * 64)
         jobs += ["c" * 32]
         self.assertEqual(phase["jobs"], ["a" * 32])
 
