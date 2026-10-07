@@ -3,5 +3,5 @@
   "revision": "2202e13962914f71e56b146ff7632282b9d04492",
   "directory": "workload",
   "image_digest": "ghcr.io/talisman36935/report-workshop@sha256:3c08b2754404fdc14dda81ee4e0bc9f9f640a3223ccd89988f19e74250c41816",
-  "status": "Exact GCP source passed Validate 37687488181, publish/native-ARM/hosted-kind HA qualification 37687979581, and anonymous AMD64/ARM64 runtime-content verification; hosted HA used three simulated workers on one machine and is not cloud-zone evidence; signature verification was not performed; live-cloud provisioning, IAM/SQS/S3, EKS/CAPA/ACK, budget and independent cloud cleanup remain pending"
+  "status": "Exact GCP source passed Validate 37687488181, publish/native-ARM/hosted-kind HA qualification 37687979581, and anonymous AMD64/ARM64 runtime-content verification; AWS Validate 37690653997 and hosted source/image promotion, rollback, drift, RBAC, network and cleanup qualification 37690806373 passed; hosted tests used simulated workers on one machine and are not cloud-zone evidence; signature verification was not performed; live-cloud provisioning, IAM/SQS/S3, EKS/CAPA/ACK, budget and independent cloud cleanup remain pending"
 }

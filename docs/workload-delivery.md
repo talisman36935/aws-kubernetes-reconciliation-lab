@@ -18,9 +18,13 @@ Its hosted promotion/rollback experiment passed at
 [37522142251](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37522142251);
 its exact per-phase source/image and gate results are in
 [`observations/bed9efd/workload-gitops.json`](observations/bed9efd/workload-gitops.json).
-These are historical consumer qualifications for the prior source/image pair; the
-new lock still requires AWS hosted source/image qualification. The prior AWS record
-before that is archived at
+These are historical consumer qualifications for the prior source/image pair. The
+current lock's hosted source/image promotion, rollback, drift, RBAC, network and
+cleanup qualification passed at
+[37690806373](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37690806373);
+its allowlisted observation is archived at
+[`observations/a9ad22e/workload-gitops.json`](observations/a9ad22e/workload-gitops.json).
+The prior AWS record before that is archived at
 [`observations/372f432/workload-gitops.json`](observations/372f432/workload-gitops.json).
 Prior AWS delivery runs remain historical evidence. None of these runs is live AWS
 or EKS/CAPA/ACK qualification.

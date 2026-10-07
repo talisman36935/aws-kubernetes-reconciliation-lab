@@ -1,18 +1,29 @@
 # Hosted application release and GitOps experiment
 
-## Current source-pin promotion — qualification in progress
+## Current source-pin promotion — 2026-10-07
 
-The GCP source/image pin at `2202e139` passed AWS Validate
-[37689716429](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37689716429),
-but its first hosted qualification attempt
-[37689903807](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37689903807)
-failed during baseline smoke. The allowlisted artifact records that baseline
-reconciliation, migration ordering and cluster cleanup completed, but it does not
-claim promotion qualification. Inspection found that the harness expected the
-phase label `baseline` to equal the fixture's synthetic release marker, even though
-the pinned baseline manifests label that release `candidate`. The harness now
-derives and validates the marker from each exact source revision. A fresh validated
-candidate and hosted run are required before claiming success.
+AWS Validate [37689716429](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37689716429)
+passed for the source/image lock at `2202e139`. Hosted qualification
+[37690806373](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37690806373)
+passed baseline, candidate promotion, source/image rollback, and drift repair with
+three golden jobs in each phase. The baseline used GCP source `3b1abf3` and its
+immutable image; the candidate used source `2202e139` and image
+`ghcr.io/talisman36935/report-workshop@sha256:3c08b2754404fdc14dda81ee4e0bc9f9f640a3223ccd89988f19e74250c41816`.
+The [source-pinned observation](observations/a9ad22e/workload-gitops.json) records
+all phase-local jobs and exact pins. The independent validator passed; source
+rollback passed (not merely configuration rollback), migration preceded apps,
+the impersonated controller was denied a Namespace create, the scoped API rights
+were observed, the local database allow/deny probes returned expected exit codes,
+and the cluster was deleted with no errors.
+
+Two earlier attempts remain accurately recorded: [37689635673](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37689635673)
+stopped before cluster creation because the candidate diff included a README edit
+outside the qualification's allowlist; [37689903807](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37689903807)
+ran the cluster and cleaned it up but exposed a mismatch between the baseline
+fixture's `candidate` marker and the harness's hard-coded phase label. The harness
+now derives and checks the synthetic marker from each exact source revision. These
+results qualify hosted kind/Flux application behavior only, not AWS/EKS or cloud
+services.
 
 Latest run: [37522142251](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37522142251)
 passed against baseline `bba5671e7d0c741445da0b272563729d754affc0` and candidate
