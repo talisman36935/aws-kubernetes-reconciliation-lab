@@ -1,5 +1,19 @@
 # Hosted application release and GitOps experiment
 
+## Current source-pin promotion — qualification in progress
+
+The GCP source/image pin at `2202e139` passed AWS Validate
+[37689716429](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37689716429),
+but its first hosted qualification attempt
+[37689903807](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37689903807)
+failed during baseline smoke. The allowlisted artifact records that baseline
+reconciliation, migration ordering and cluster cleanup completed, but it does not
+claim promotion qualification. Inspection found that the harness expected the
+phase label `baseline` to equal the fixture's synthetic release marker, even though
+the pinned baseline manifests label that release `candidate`. The harness now
+derives and validates the marker from each exact source revision. A fresh validated
+candidate and hosted run are required before claiming success.
+
 Latest run: [37522142251](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37522142251)
 passed against baseline `bba5671e7d0c741445da0b272563729d754affc0` and candidate
 `bed9efd1e2e0d563078f5535b9b5be8e2f88127d`. It promoted GCP source

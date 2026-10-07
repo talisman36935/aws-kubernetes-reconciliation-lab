@@ -92,6 +92,24 @@ def request(path, payload=None, key=None):
         return json.load(response)
 
 
+def release_marker(revision):
+    """Read and validate the synthetic marker from the exact source revision."""
+    path = "management/workload-test/apps/resources.json"
+    document = json.loads(run("git", "show", revision + ":" + path))
+    items = document.get("items", [])
+    markers = [item.get("data", {}).get("release") for item in items
+               if item.get("kind") == "ConfigMap"
+               and item.get("metadata", {}).get("name") == "delivery-release"]
+    deployments = [item for item in items if item.get("kind") == "Deployment"]
+    deployment_markers = [item.get("spec", {}).get("template", {}).get(
+        "metadata", {}).get("annotations", {}).get("portfolio.whitt.uk/config-release")
+        for item in deployments]
+    if (len(markers) != 1 or markers[0] not in {"baseline", "candidate"}
+            or not deployments or any(value != markers[0] for value in deployment_markers)):
+        raise ValueError("source revision has inconsistent synthetic release markers")
+    return markers[0]
+
+
 def stop_forward(process):
     if process:
         process.terminate()
@@ -312,6 +330,8 @@ def main():
     if output.exists():
         parser.error("refusing to overwrite observations")
     lock = candidate_lock
+    baseline_marker = release_marker(args.baseline)
+    candidate_marker = release_marker(args.candidate)
     record = {"verification": "hosted-kind-flux", "result": "failed",
               "started_at": stamp(), "baseline_revision": args.baseline,
               "candidate_revision": args.candidate, "application_source": lock["revision"],
@@ -369,18 +389,18 @@ def main():
                 if datetime.fromisoformat(created_at.replace("Z", "+00:00")) < completion:
                     raise ValueError("application deployed before migration completion")
             record["migration_before_apps"] = True
-            jobs = smoke("baseline", baseline_lock["image_digest"], [])
+            jobs = smoke(baseline_marker, baseline_lock["image_digest"], [])
             record["phases"].append(phase_record("baseline", args.baseline, jobs,
                                                   baseline_lock["revision"], baseline_lock["image_digest"]))
             stage = "candidate-reconciliation"
             reconcile(args.candidate)
-            new = smoke("candidate", lock["image_digest"], jobs)
+            new = smoke(candidate_marker, lock["image_digest"], jobs)
             record["phases"].append(phase_record("candidate", args.candidate, new,
                                                   lock["revision"], lock["image_digest"]))
             jobs += new
             stage = "rollback-reconciliation"
             reconcile(args.baseline)
-            new = smoke("baseline", baseline_lock["image_digest"], jobs)
+            new = smoke(baseline_marker, baseline_lock["image_digest"], jobs)
             record["phases"].append(phase_record("rollback", args.baseline, new,
                                                   baseline_lock["revision"], baseline_lock["image_digest"]))
             jobs += new
@@ -391,7 +411,7 @@ def main():
                  json.dumps({"spec": {"template": {"metadata": {"annotations": {
                      "portfolio.whitt.uk/config-release": "out-of-band"}}}}}))
             reconcile(args.baseline)
-            new = smoke("baseline", baseline_lock["image_digest"], jobs)
+            new = smoke(baseline_marker, baseline_lock["image_digest"], jobs)
             record["phases"].append(phase_record("drift-repaired", args.baseline, new,
                                                   baseline_lock["revision"], baseline_lock["image_digest"]))
             stage = "delegated-denial"
