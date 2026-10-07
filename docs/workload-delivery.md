@@ -4,17 +4,23 @@ The shared source owns the Pub/Sub/GCS and SQS/S3 adapters and delivery renderer
 AWS consumes its immutable source and image in `workload/source.json`; it does not
 maintain a second application implementation. The delivery entry point requires
 a clean checkout of exactly that commit and a release record matching both pins.
-The current candidate pin is GCP source `3b1abf3b791b4ab95f852c860786ca91d8c0a381` and
-image index `ghcr.io/talisman36935/report-workshop@sha256:dfba95425f82b619987f307e63e2e2720f9395a5a2c7836ec2d2a25f7d398d23`.
-That exact source passed GCP Validate (`37517856995`) and publish/native-ARM/
-Kubernetes HA qualification (`37518413015`). Anonymous verification checked
-AMD64/ARM64 runtime content. AWS fixture validation passed at
+The current source pin is GCP source `2202e13962914f71e56b146ff7632282b9d04492` and
+image index `ghcr.io/talisman36935/report-workshop@sha256:3c08b2754404fdc14dda81ee4e0bc9f9f640a3223ccd89988f19e74250c41816`.
+That exact source passed GCP Validate (`37687488181`) and publish/native-ARM/
+hosted-kind HA qualification (`37687979581`). Anonymous verification checked
+AMD64/ARM64 runtime content. The source-scoped records are in the
+[GCP qualification observation](https://github.com/talisman36935/gcp-platform-delivery-lab/tree/main/docs/observations/2202e13).
+The HA experiment used three simulated workers on one hosted machine; no cloud was
+provisioned and no cloud-zone failure or signature verification was established.
+The previous source lock's AWS fixture validation passed at
 [37521913969](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37521913969).
-The hosted promotion/rollback experiment passed at
+Its hosted promotion/rollback experiment passed at
 [37522142251](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37522142251);
 its exact per-phase source/image and gate results are in
 [`observations/bed9efd/workload-gitops.json`](observations/bed9efd/workload-gitops.json).
-The previous qualified AWS record is archived at
+These are historical consumer qualifications for the prior source/image pair; the
+new lock still requires AWS hosted source/image qualification. The prior AWS record
+before that is archived at
 [`observations/372f432/workload-gitops.json`](observations/372f432/workload-gitops.json).
 Prior AWS delivery runs remain historical evidence. None of these runs is live AWS
 or EKS/CAPA/ACK qualification.
