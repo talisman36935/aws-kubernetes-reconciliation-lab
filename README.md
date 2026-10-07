@@ -48,7 +48,7 @@ To reproduce that exact application version:
 ```sh
 git clone https://github.com/talisman36935/gcp-platform-delivery-lab.git
 cd gcp-platform-delivery-lab
-git checkout --detach 2202e13962914f71e56b146ff7632282b9d04492
+git checkout --detach 0e0a6133a18e4cfb10aae4defabd5b8f52ec69b5
 cd workload
 docker compose up --build -d
 python3 smoke.py
