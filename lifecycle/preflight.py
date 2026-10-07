@@ -16,8 +16,8 @@ def validate(intent: dict, now: datetime) -> None:
         raise ValueError("run_id must have the lab- prefix and bounded safe characters")
     if not re.fullmatch(r"[0-9]{12}", str(intent["account_id"])):
         raise ValueError("account_id must be an explicit 12-digit AWS account")
-    if not re.fullmatch(r"(us|eu|ap|ca|sa|af|me|il|mx)-[a-z]+-[0-9]", str(intent["region"])):
-        raise ValueError("region must be an explicit commercial AWS region")
+    if intent["region"] != "eu-west-2":
+        raise ValueError("region must be the approved London region eu-west-2")
     expires = datetime.fromisoformat(intent["expires_at"].replace("Z", "+00:00"))
     if expires.tzinfo is None or not now < expires <= now + timedelta(hours=1):
         raise ValueError("expiry must be timezone-aware, in the future, and within 60 minutes")

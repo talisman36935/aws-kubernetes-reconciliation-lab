@@ -33,6 +33,11 @@ class PreflightTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     validate({**self.intent, field: value}, self.now)
 
+    def test_rejects_commercial_regions_outside_london(self):
+        for region in ("eu-west-1", "us-east-1"):
+            with self.subTest(region=region), self.assertRaises(ValueError):
+                validate({**self.intent, "region": region}, self.now)
+
     def test_rejects_unknown_fields(self):
         with self.assertRaises(ValueError):
             validate({**self.intent, "credentials": "forbidden"}, self.now)
