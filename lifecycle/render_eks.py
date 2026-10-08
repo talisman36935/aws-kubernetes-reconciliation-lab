@@ -36,7 +36,7 @@ def render(intent: dict, *, kubernetes_version: str, operator_cidr: str,
     labels = {"portfolio.whitt.uk/owner": "portfolio-lab",
               "portfolio.whitt.uk/run-id": name}
     annotations = {"portfolio.whitt.uk/expires-at": intent["expires_at"],
-                   "portfolio.whitt.uk/budget-gbp": str(intent["budget_gbp"])}
+                   "portfolio.whitt.uk/planned-gross-gbp": str(intent["planned_gross_gbp"])}
 
     def obj(api, kind, object_name, spec=None):
         metadata = {"name": object_name, "labels": dict(labels),

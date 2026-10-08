@@ -2,7 +2,7 @@
 
 ## Current source-pin promotion — 2026-10-07
 
-AWS Validate [37689716429](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37689716429)
+AWS Validate [37690653997](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37690653997)
 passed for the source/image lock at `2202e139`. Hosted qualification
 [37690806373](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37690806373)
 passed baseline, candidate promotion, source/image rollback, and drift repair with
@@ -25,7 +25,7 @@ now derives and checks the synthetic marker from each exact source revision. The
 results qualify hosted kind/Flux application behavior only, not AWS/EKS or cloud
 services.
 
-Latest run: [37522142251](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37522142251)
+Prior source-pin run: [37522142251](https://github.com/talisman36935/aws-kubernetes-reconciliation-lab/actions/runs/37522142251)
 passed against baseline `bba5671e7d0c741445da0b272563729d754affc0` and candidate
 `bed9efd1e2e0d563078f5535b9b5be8e2f88127d`. It promoted GCP source
 `3b1abf3b791b4ab95f852c860786ca91d8c0a381` and image

@@ -23,6 +23,10 @@ The renderer follows the maintained EKS managed-machine-pool template:
 
 The generated namespace is the run ID. All objects carry owner/run labels and
 expiry/budget annotations; AWS resources receive declared owner/run/expiry tags.
+The static intent validator restricts the requested region to London (`eu-west-2`);
+this does not verify the caller's account, authorize spend, or enforce provider
+resource placement. The live executor and every generated resource still require
+independent identity/region checks before cloud activation.
 The controller identity and EKS/node IAM roles must already exist under their
 declared bootstrap owner. CAPA owns the generated VPC, with three selected AZs;
 network/NAT cost and quota must be evaluated before activation.

@@ -9,11 +9,12 @@ TEMPLATE = Path(__file__).with_name("budget-alerts.json")
 
 
 class BudgetAlertTests(unittest.TestCase):
-    def test_gross_cost_thresholds_and_private_sns_recipient(self):
+    def test_gross_cost_thresholds_are_configurable_alerts_not_a_cap(self):
         template = json.loads(TEMPLATE.read_text())
         params = template["Parameters"]
         self.assertTrue(params["AlertEmail"]["NoEcho"])
-        self.assertEqual(params["BudgetAmount"]["MaxValue"], 5)
+        self.assertNotIn("MaxValue", params["BudgetAmount"])
+        self.assertIn("not a spending cap", params["BudgetAmount"]["Description"])
         self.assertEqual(params["BudgetCurrency"]["AllowedValues"], ["GBP"])
         budget = template["Resources"]["RunCostBudget"]["Properties"]
         self.assertFalse(budget["Budget"]["CostTypes"]["IncludeCredit"])
