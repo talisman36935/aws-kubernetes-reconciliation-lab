@@ -11,13 +11,12 @@
     "BudgetAmount": {
       "Type": "Number",
       "MinValue": 0.01,
-      "MaxValue": 5,
-      "Description": "Gross monthly alert threshold in GBP; this is not a spending cap."
+      "Description": "Gross monthly notification threshold in GBP; choose against account baseline and credit runway. This is not a spending cap."
     },
     "BudgetCurrency": {
       "Type": "String",
       "AllowedValues": ["GBP"],
-      "Description": "This lab template fails closed unless the billing currency matches the approved GBP ceiling."
+      "Description": "This lab template requires GBP billing currency; the budget is a notification threshold, not a spending cap."
     }
   },
   "Resources": {

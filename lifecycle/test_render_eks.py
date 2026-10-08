@@ -10,7 +10,7 @@ def fixture():
     now = datetime.now(timezone.utc)
     intent = {"run_id": "lab-schema-fixture", "account_id": "123456789012",
               "region": "eu-west-2", "expires_at": (now + timedelta(hours=1)).isoformat(),
-              "budget_gbp": 5}
+              "planned_gross_gbp": 5}
     args = {"kubernetes_version": "1.35", "operator_cidr": "192.0.2.10/32",
             "instance_type": "t4g.medium", "control_plane_role": "lab-eks-control",
             "node_role": "lab-eks-node", "identity_name": "lab-capa", "now": now}
@@ -24,6 +24,10 @@ class RenderTests(unittest.TestCase):
         for item in result["items"]:
             self.assertEqual(item["metadata"]["labels"]["portfolio.whitt.uk/run-id"],
                              intent["run_id"])
+            self.assertEqual(
+                item["metadata"]["annotations"]["portfolio.whitt.uk/planned-gross-gbp"],
+                str(intent["planned_gross_gbp"]),
+            )
         pool = next(i for i in result["items"] if i["kind"] == "MachinePool")
         self.assertEqual(pool["spec"]["replicas"], 1)
         pools = [i for i in result["items"] if i["kind"] == "AWSManagedMachinePool"]
